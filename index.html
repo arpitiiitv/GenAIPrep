@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Enterprise GenAI Architecture interview revision guide by Arpit Tiwari.">
+  <title>AI Architecture Interview OS — Arpit Tiwari</title>
+  <style>
+    :root {
+      --bg: #070b16;
+      --surface: #0d1425;
+      --surface-2: #111b31;
+      --surface-3: #17233d;
+      --text: #f5f7fb;
+      --muted: #9ca9bf;
+      --border: rgba(255,255,255,.1);
+      --gold: #efbd62;
+      --gold-2: #ffe1a3;
+      --cyan: #6ad7e5;
+      --green: #58d6a3;
+      --red: #ff8791;
+      --shadow: 0 24px 70px rgba(0,0,0,.34);
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% -10%, rgba(61,108,177,.24), transparent 33rem),
+        radial-gradient(circle at 90% 0%, rgba(239,189,98,.13), transparent 28rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    button, input, select, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    .app { min-height: 100vh; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(18px);
+      background: rgba(7,11,22,.82);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner, .main, .hero-inner { width: min(1240px, calc(100% - 32px)); margin: auto; }
+    .topbar-inner { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center;
+      color: #171108; font-weight: 900; background: linear-gradient(135deg, var(--gold-2), var(--gold));
+      box-shadow: 0 8px 24px rgba(239,189,98,.18);
+    }
+    .brand-copy { min-width: 0; }
+    .brand-title { font-weight: 750; letter-spacing: -.02em; white-space: nowrap; }
+    .brand-sub { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .top-actions { display: flex; gap: 8px; }
+    .icon-btn, .btn, .chip, .mode-btn, .bookmark-btn {
+      border: 1px solid var(--border); color: var(--text); background: rgba(255,255,255,.035);
+      border-radius: 12px; cursor: pointer; transition: .18s ease;
+    }
+    .icon-btn { width: 40px; height: 40px; display: grid; place-items: center; }
+    .btn { padding: 10px 14px; font-weight: 650; }
+    .btn:hover, .icon-btn:hover, .mode-btn:hover, .chip:hover { border-color: rgba(239,189,98,.5); background: rgba(239,189,98,.08); }
+    .btn.primary { background: var(--gold); color: #171108; border-color: var(--gold); }
+    .btn.primary:hover { background: var(--gold-2); }
+    .hero { padding: 68px 0 38px; border-bottom: 1px solid var(--border); }
+    .eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: .18em; font-size: 12px; font-weight: 800; }
+    h1 { margin: 14px 0 16px; max-width: 900px; font-size: clamp(38px, 7vw, 74px); line-height: 1.02; letter-spacing: -.055em; }
+    .hero p { margin: 0; max-width: 760px; color: #bac5d7; font-size: clamp(17px, 2vw, 20px); }
+    .identity { margin-top: 28px; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 20px; color: var(--muted); font-size: 14px; }
+    .identity strong { color: var(--text); }
+    .identity a { text-decoration: none; border-bottom: 1px solid rgba(239,189,98,.45); }
+    .identity a:hover { color: var(--gold-2); }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 36px; }
+    .stat { padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,.025); }
+    .stat-value { font-size: 26px; font-weight: 780; letter-spacing: -.04em; }
+    .stat-label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; }
+    .progress-shell { margin-top: 14px; height: 6px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--cyan)); transition: width .3s ease; }
+    .main { padding: 28px 0 80px; }
+    .controls {
+      position: sticky; top: 82px; z-index: 10; padding: 14px;
+      border: 1px solid var(--border); border-radius: 18px; background: rgba(13,20,37,.91);
+      backdrop-filter: blur(16px); box-shadow: var(--shadow);
+    }
+    .control-row { display: grid; grid-template-columns: minmax(240px, 1fr) auto auto; gap: 10px; }
+    .search-wrap { position: relative; }
+    .search-wrap span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .search, select {
+      width: 100%; height: 44px; color: var(--text); background: var(--surface-2);
+      border: 1px solid var(--border); border-radius: 12px; outline: none;
+    }
+    .search { padding: 0 44px; }
+    select { padding: 0 36px 0 12px; }
+    .search:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(239,189,98,.12); }
+    .kbd { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; font-size: 11px; }
+    .mode-switch { display: flex; gap: 4px; padding: 4px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border); }
+    .mode-btn { padding: 6px 12px; border: 0; background: transparent; color: var(--muted); }
+    .mode-btn.active { background: var(--surface-3); color: var(--gold-2); }
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding: 12px 1px 1px; scrollbar-width: thin; }
+    .chip { padding: 7px 11px; white-space: nowrap; color: var(--muted); font-size: 13px; }
+    .chip.active { color: #171108; background: var(--gold); border-color: var(--gold); }
+    .result-meta { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 24px 2px 14px; color: var(--muted); font-size: 13px; }
+    .keyboard-help { display: none; }
+    .question-list { display: grid; gap: 12px; }
+    .question-card {
+      border: 1px solid var(--border); border-radius: var(--radius); background: linear-gradient(180deg, rgba(17,27,49,.94), rgba(13,20,37,.94));
+      overflow: clip; transition: transform .2s, border-color .2s, background .2s;
+    }
+    .question-card:hover { border-color: rgba(255,255,255,.17); }
+    .question-card.mastered { border-color: rgba(88,214,163,.3); }
+    .question-head { width: 100%; border: 0; color: inherit; background: transparent; padding: 20px; display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; text-align: left; cursor: pointer; }
+    .q-number { color: var(--gold); font-weight: 800; min-width: 34px; }
+    .q-title { font-size: 17px; font-weight: 720; line-height: 1.42; letter-spacing: -.015em; }
+    .q-meta { margin-top: 7px; display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: var(--muted); font-size: 12px; }
+    .tag { border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; }
+    .chevron { color: var(--muted); font-size: 18px; transition: transform .2s; }
+    .question-card.open .chevron { transform: rotate(180deg); }
+    .answer { display: none; padding: 0 20px 20px 68px; }
+    .question-card.open .answer { display: block; }
+    .answer-inner { border-top: 1px solid var(--border); padding-top: 18px; color: #cbd4e3; }
+    .answer h4 { color: var(--text); margin: 20px 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: .08em; }
+    .answer p { margin: 0 0 12px; }
+    .answer ul, .answer ol { margin: 8px 0 16px; padding-left: 22px; }
+    .answer li { margin: 5px 0; }
+    .answer blockquote { margin: 16px 0; padding: 12px 16px; border-left: 3px solid var(--gold); color: var(--gold-2); background: rgba(239,189,98,.06); }
+    .answer code { color: var(--cyan); background: rgba(106,215,229,.08); padding: 2px 5px; border-radius: 5px; }
+    .answer-actions { margin-top: 18px; display: flex; gap: 9px; flex-wrap: wrap; }
+    .bookmark-btn { padding: 8px 12px; color: var(--muted); }
+    .bookmark-btn.active { color: var(--gold-2); background: rgba(239,189,98,.08); }
+    .master-btn.active { color: var(--green); border-color: rgba(88,214,163,.35); }
+    .note { width: 100%; min-height: 88px; resize: vertical; margin-top: 12px; padding: 12px; color: var(--text); background: rgba(7,11,22,.58); border: 1px solid var(--border); border-radius: 12px; outline: none; }
+    .flash-shell { display: none; }
+    body.flash-mode .question-list, body.flash-mode .result-meta { display: none; }
+    body.flash-mode .flash-shell { display: block; }
+    .flash-card { min-height: 460px; border: 1px solid var(--border); border-radius: 26px; background: linear-gradient(145deg, var(--surface-2), var(--surface)); box-shadow: var(--shadow); padding: clamp(26px, 5vw, 56px); display: flex; flex-direction: column; justify-content: space-between; }
+    .flash-top { display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 13px; }
+    .flash-question { margin: 52px 0 28px; max-width: 900px; font-size: clamp(26px, 4vw, 46px); line-height: 1.16; letter-spacing: -.04em; }
+    .flash-answer { display: none; color: #cbd4e3; max-width: 900px; }
+    .flash-answer.show { display: block; }
+    .flash-actions { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+    .empty { display: none; text-align: center; color: var(--muted); padding: 70px 20px; border: 1px dashed var(--border); border-radius: var(--radius); }
+    .footer { border-top: 1px solid var(--border); color: var(--muted); padding: 24px 0 40px; text-align: center; font-size: 13px; }
+    mark { color: inherit; background: rgba(239,189,98,.28); border-radius: 3px; }
+    .toast { position: fixed; bottom: 22px; left: 50%; transform: translate(-50%, 20px); opacity: 0; pointer-events: none; padding: 10px 14px; border-radius: 10px; background: var(--text); color: var(--bg); font-weight: 650; z-index: 30; transition: .2s; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 760px) {
+      .brand-sub { display: none; }
+      .hero { padding-top: 46px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls { top: 76px; }
+      .control-row { grid-template-columns: 1fr auto; }
+      .control-row select { grid-column: 1 / -1; }
+      .answer { padding-left: 20px; }
+      .question-head { grid-template-columns: auto 1fr auto; padding: 17px; gap: 10px; }
+      .kbd { display: none; }
+    }
+    @media (max-width: 480px) {
+      .topbar-inner, .main, .hero-inner { width: min(100% - 22px, 1240px); }
+      .top-actions .label { display: none; }
+      .stats { gap: 8px; }
+      .stat { padding: 14px; }
+      .control-row { grid-template-columns: 1fr; }
+      .mode-switch { justify-content: stretch; }
+      .mode-btn { flex: 1; }
+      .question-head { grid-template-columns: 1fr auto; }
+      .q-number { grid-column: 1; }
+      .q-title-wrap { grid-column: 1 / -1; grid-row: 2; }
+      .chevron { grid-column: 2; grid-row: 1; }
+      .flash-card { min-height: 520px; }
+    }
+    @media print {
+      body { background: #fff; color: #111; }
+      .topbar, .controls, .answer-actions, .footer, .flash-shell { display: none !important; }
+      .hero { padding: 24px 0; }
+      .hero p, .identity, .q-meta, .answer { color: #333; }
+      .question-card { break-inside: avoid; background: #fff; border-color: #ddd; }
+      .question-card .answer { display: block !important; }
+      .answer-inner { color: #222; }
+      .question-list { display: grid !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <div class="brand-mark">AI</div>
+          <div class="brand-copy">
+            <div class="brand-title">Architecture Interview OS</div>
+            <div class="brand-sub">Principal-level GenAI revision system</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="btn" id="randomBtn" aria-label="Open a random question">↝ <span class="label">Random</span></button>
+          <button class="icon-btn" id="printBtn" aria-label="Print complete guide">⎙</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="eyebrow">Enterprise GenAI · Senior to Principal</div>
+        <h1>Architect the system.<br>Defend every decision.</h1>
+        <p>A focused interview bank for RAG, fine-tuning, caching, evaluations, observability, feedback loops, guardrails, and production monitoring.</p>
+        <div class="identity">
+          <span><strong>Arpit Tiwari</strong> · Senior AI Engineer at Turing</span>
+          <a href="https://www.schoolofdataandai.com/" target="_blank" rel="noopener">School of Data &amp; AI ↗</a>
+          <a href="https://www.linkedin.com/in/arpit-tiwari-4a5538190/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-value" id="totalStat">0</div><div class="stat-label">Architecture questions</div></div>
+          <div class="stat"><div class="stat-value">8</div><div class="stat-label">Core dimensions</div></div>
+          <div class="stat"><div class="stat-value" id="masteredStat">0</div><div class="stat-label">Mastered</div></div>
+          <div class="stat"><div class="stat-value" id="progressStat">0%</div><div class="stat-label">Revision progress</div></div>
+        </div>
+        <div class="progress-shell" aria-label="Revision progress"><div class="progress-bar" id="progressBar"></div></div>
+      </div>
+    </section>
+
+    <main class="main">
+      <section class="controls" aria-label="Revision controls">
+        <div class="control-row">
+          <label class="search-wrap">
+            <span>⌕</span>
+            <input class="search" id="searchInput" type="search" placeholder="Search question, concept, metric, or technology…" autocomplete="off">
+            <kbd class="kbd">/</kbd>
+          </label>
+          <select id="statusFilter" aria-label="Filter by study status">
+            <option value="all">All questions</option>
+            <option value="bookmarked">Bookmarked</option>
+            <option value="mastered">Mastered</option>
+            <option value="unmastered">Not mastered</option>
+          </select>
+          <div class="mode-switch" aria-label="Study mode">
+            <button class="mode-btn active" data-mode="browse">Browse</button>
+            <button class="mode-btn" data-mode="flash">Flashcards</button>
+          </div>
+        </div>
+        <div class="chips" id="chips" aria-label="Architecture dimensions"></div>
+      </section>
+
+      <div class="result-meta">
+        <span id="resultCount">0 questions</span>
+        <span>Shortcuts: <strong>/</strong> search · <strong>J/K</strong> navigate · <strong>Space</strong> reveal</span>
+      </div>
+      <section class="question-list" id="questionList"></section>
+      <div class="empty" id="emptyState">No questions match these filters. Try another term or dimension.</div>
+
+      <section class="flash-shell" aria-label="Flashcard study mode">
+        <article class="flash-card">
+          <div>
+            <div class="flash-top"><span id="flashCategory"></span><span id="flashCounter"></span></div>
+            <h2 class="flash-question" id="flashQuestion"></h2>
+            <div class="flash-answer" id="flashAnswer"></div>
+          </div>
+          <div class="flash-actions">
+            <div><button class="btn" id="prevFlash">← Previous</button> <button class="btn" id="nextFlash">Next →</button></div>
+            <div><button class="btn primary" id="revealFlash">Reveal answer</button> <button class="btn master-btn" id="masterFlash">Mark mastered</button></div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">Built for deliberate practice · Your notes, bookmarks, and progress stay in this browser.</footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    const DATA = [
+      {
+        category: "RAG",
+        challenges: "Heterogeneous ingestion, chunking, retrieval quality, document freshness, citations, ACL enforcement, low latency, and prompt injection.",
+        items: [
+          { q: "Explain transformers at the depth needed to design an enterprise GenAI system.", tags:["Transformers","Foundations"], a:`<p>A transformer converts tokens into contextual representations. Text is tokenized, mapped to embeddings, combined with positional information, and processed through repeated attention and feed-forward blocks.</p><h4>What attention does</h4><p>Each token creates query, key, and value representations. Query–key compatibility determines how strongly the token uses other tokens’ values. Multi-head attention learns several relationship patterns in parallel; residual connections and normalization stabilize deep networks. A decoder model then predicts a distribution over the next token.</p><h4>Architectural implications</h4><ul><li>Large context is capacity, not guaranteed comprehension; relevance and placement still matter.</li><li>Longer inputs increase latency, cost, and infrastructure pressure.</li><li>Tokenization affects cost and multilingual behavior.</li><li>The model predicts plausible tokens; it does not inherently verify truth or enforce policy.</li><li>Authorization, transactions, schemas, workflows, and business rules must remain deterministic.</li></ul><blockquote>Treat the transformer as a probabilistic reasoning component—not a policy engine, database, or transaction manager.</blockquote>` },
+          { q: "What are bi-encoders and cross-encoders, and how are they used in RAG?", tags:["Embeddings","Reranking"], a:`<p>A <strong>bi-encoder</strong> embeds the query and every passage independently. Document vectors can be precomputed and indexed, making approximate nearest-neighbor retrieval practical over millions of chunks. The weakness is limited query–passage interaction during scoring.</p><p>A <strong>cross-encoder</strong> processes the query and candidate passage together. Joint attention normally gives a more precise relevance score, but it must run for each pair and is too expensive for first-stage search.</p><h4>Production pattern</h4><ol><li>Hybrid or bi-encoder retrieval returns 50–200 candidates.</li><li>Deterministic ACL and metadata filters remove invalid items.</li><li>A cross-encoder reranks the remaining candidates.</li><li>Deduplication and diversification select perhaps 5–15 chunks.</li></ol><p>Rerank fewer candidates or only ambiguous queries when latency matters. Select the operating point through recall, nDCG, latency, and cost measurements.</p><blockquote>Bi-encoder for scalable candidate generation; cross-encoder for precise candidate ordering.</blockquote>` },
+          { q: "Why not pass an entire PDF into a model with a one-million-token context window?", tags:["Long context","Trade-offs"], a:`<p>Capacity is not effective utilization. Models can miss evidence inside large irrelevant contexts—the “lost in the middle” problem.</p><ul><li><strong>Cost and latency:</strong> every request resends content and makes retries expensive.</li><li><strong>Security:</strong> users should receive only the authorized, necessary context.</li><li><strong>Freshness:</strong> RAG tracks document and index versions explicitly.</li><li><strong>Auditability:</strong> retrieved chunks and scores can be inspected and cited.</li><li><strong>Reliability:</strong> ingestion work is reused instead of repeated after each failure.</li></ul><p>Long context is useful for summarizing one authorized document or comparing a few selected documents. At enterprise scale, I combine selective retrieval with long context rather than choosing one universally.</p>` },
+          { q: "Design low-latency search over 10 million confidential PDFs with document-level ACLs.", tags:["System design","ACL","Scale"], a:`<h4>Ingestion plane</h4><ol><li>Land files in encrypted object storage and register stable document IDs, tenant, source version, checksums, classification, and ACL reference.</li><li>Scan files, extract text with layout-aware parsing/OCR, preserve headings, tables, pages, and parent–child structure.</li><li>Chunk by document structure; attach tenant, document/version, page, ACL attributes, parser version, and embedding version.</li><li>Generate embeddings asynchronously and update lexical plus vector indexes with idempotent workers.</li><li>Expose a version only after every required index is consistent; reconcile source, registry, and indexes periodically.</li></ol><h4>Query plane</h4><ol><li>Authenticate the user and resolve tenant, roles, groups, and attributes.</li><li>Build authorization filters before retrieval.</li><li>Run hybrid candidate generation, authorization enforcement, reranking, deduplication, and context assembly.</li><li>Generate with citations and validate that cited spans support claims.</li></ol><h4>ACL trade-off</h4><p>Post-filtering alone can destroy recall if ANN returns mostly unauthorized candidates. Use pre-filtered ANN, controlled over-retrieval plus a policy decision point, or physically partition indexes by tenant/security boundary. Deny by default if identity or policy services fail.</p>` },
+          { q: "How do you choose a chunking strategy?", tags:["Ingestion","Chunking"], a:`<p>The correct chunk is the smallest unit that can answer the target question independently while retaining enough context to remain meaningful.</p><ul><li><strong>Fixed-token:</strong> simple, but breaks structure.</li><li><strong>Recursive:</strong> heading → paragraph → sentence → token.</li><li><strong>Semantic:</strong> coherent, but more expensive and less deterministic.</li><li><strong>Layout-aware:</strong> preserves pages, columns, tables, and captions.</li><li><strong>Hierarchical:</strong> retrieve small child chunks but return a larger parent section.</li></ul><p>For policy documents I might use 300–600-token children, limited overlap, section paths, parent links, and page coordinates. I compare recall@k, nDCG, faithfulness, citation accuracy, duplicate rate, latency, index size, and token cost. Chunking is versioned per document class, not hard-coded globally.</p>` },
+          { q: "How do you select and migrate an embedding model?", tags:["Embeddings","Migration"], a:`<p>I benchmark on real domain queries rather than public leaderboards alone. Criteria include domain and multilingual performance, input length, dimensionality, asymmetric retrieval support, throughput, residency, licensing, and cost.</p><p>The evaluation covers recall@5/10/50, MRR, nDCG, latency, and hard slices such as acronyms, exact IDs, negation, dates, and rare terminology. Hybrid retrieval remains important for exact identifiers.</p><p>Every chunk stores an embedding-model version. For migration, create a shadow index or dual-write during a controlled period, compare retrieval and end-to-end quality, switch an alias atomically, and retain rollback. Never mix incompatible embedding spaces in one similarity index.</p>` },
+          { q: "How do you handle added, modified, deleted, and ACL-changed documents?", tags:["Freshness","Indexing"], a:`<p>Use a version-aware incremental pipeline. Track stable document ID, source version, content/metadata/ACL checksums, parser version, embedding version, and indexing state.</p><ul><li><strong>Add:</strong> ingest fully and activate only after all indexes succeed.</li><li><strong>Modify:</strong> compare document and chunk checksums; reprocess only affected content when safe, then atomically activate the new version.</li><li><strong>Delete:</strong> publish a tombstone, remove from all indexes, invalidate caches, and follow retention policy.</li><li><strong>ACL-only change:</strong> update authorization metadata without recomputing embeddings and immediately invalidate entitlement caches.</li></ul><p>The previous complete version stays active through partial failure. An idempotent reconciliation job detects missing and orphaned records across storage, registry, vector, and lexical indexes.</p>` },
+          { q: "What should happen after a query reaches the retrieval system?", tags:["Query pipeline","Hybrid search"], a:`<ol><li>Classify intent: knowledge, summarization, calculation, action, or conversation.</li><li>Contextualize genuine follow-ups into standalone queries.</li><li>Decompose only multi-part questions that require independent evidence.</li><li>Extract entities, dates, regions, document types, and authorization filters.</li><li>Generate candidates with dense, lexical, metadata, or specialized retrievers.</li><li>Fuse rankings, then rerank authorized candidates.</li><li>Deduplicate, diversify, prefer valid versions, and allocate context budget.</li></ol><p>Increasing top-k may improve recall but hurt generation with distractors. For ambiguous requests, asking a clarifying question may be better than broad retrieval.</p>` },
+          { q: "How do you assemble retrieved context for the LLM?", tags:["Context engineering","Citations"], a:`<p>Retrieval and context assembly are separate stages. Remove unauthorized and stale content, rerank, deduplicate, balance relevance with coverage and authority, expand child chunks when needed, and allocate tokens across subquestions.</p><p>Include source IDs and precise page/section locations; delimit sources and label them as untrusted data. Context ordering depends on the task: strongest evidence first, chronological for timelines, or grouped by source for comparison.</p><p>Define conflict rules such as preferring the currently effective approved policy. If authoritative sources disagree, expose the disagreement. Finally, validate claim-level citation entailment—not merely whether a cited document appeared in retrieval.</p>` },
+          { q: "How do you quantify RAG accuracy?", tags:["Metrics","Evaluation"], a:`<p>I avoid one misleading accuracy number and report a scorecard.</p><ul><li><strong>Retrieval:</strong> recall@k, precision@k, MRR/nDCG, authorized retrieval, freshness, and duplicates.</li><li><strong>Generation:</strong> faithfulness, relevance, completeness, citation correctness/completeness, and correct abstention.</li><li><strong>End-to-end:</strong> task success, expert correctness, resolution rate, latency, cost, and safety violations.</li></ul><p>Results are segmented by intent, language, document class, user group, and risk. Example: 94% evidence recall@10, 91% citation correctness, and 87% end-to-end task success—not “94% chatbot accuracy.” LLM judges are calibrated against expert labels.</p>` },
+          { q: "What is hybrid retrieval, and when would you use it?", tags:["BM25","Dense retrieval"], a:`<p>Hybrid retrieval combines lexical search with dense semantic search. Lexical search excels at exact names, codes, dates, numbers, and rare error strings. Dense retrieval handles paraphrase, conceptual similarity, and cross-lingual meaning.</p><p>Run both and combine ranks using reciprocal-rank fusion, calibrated normalized scores, a learned ranker, or query-dependent routing. Raw BM25 and cosine scores are not directly comparable. Identifier-heavy queries can favor lexical retrieval; conceptual questions can favor dense retrieval. Validate the choice against domain-specific recall and ranking metrics.</p>` },
+          { q: "How do you defend RAG against prompt injection in documents?", tags:["Security","Prompt injection"], a:`<p>Retrieved documents are untrusted input. They may provide evidence but cannot redefine system policy or authorize actions.</p><ul><li>Separate and clearly delimit instructions from retrieved data.</li><li>Detect suspicious instruction-like content during ingestion and retrieval.</li><li>Do authorization and tool permissions outside the model.</li><li>Never expose secrets in prompts or allow documents to expand tool access.</li><li>Separate retrieval from action authorization.</li><li>Apply output DLP and exfiltration controls.</li><li>Maintain indirect prompt-injection tests.</li></ul><blockquote>Evidence can inform a proposal; it cannot authorize a side effect.</blockquote>` }
+        ]
+      },
+      {
+        category: "Fine-Tuning",
+        challenges: "Selecting the right intervention, data quality and privacy, tuning strategy, regression prevention, deployment, and model lifecycle.",
+        items: [
+          { q: "When should you choose prompting, RAG, or fine-tuning?", tags:["Decision framework"], a:`<p>Choose based on the failure type:</p><ul><li><strong>Prompting:</strong> the model has the capability but needs clearer instructions, examples, constraints, or schemas.</li><li><strong>RAG:</strong> knowledge is private, current, attributable, permissioned, or frequently updated.</li><li><strong>Fine-tuning:</strong> repeatable behavior must change—classification, extraction, style, tool choice, specialized terminology, or small-model task performance.</li></ul><p>Fine-tuning is a poor database update mechanism because freshness, deletion, citations, and ACLs become difficult. A mature system may use all three: tuning for behavior, RAG for knowledge, and prompting for request-specific instructions. Establish a baseline and error taxonomy before tuning.</p>` },
+          { q: "How would you design a governed fine-tuning data pipeline?", tags:["Data","Governance"], a:`<ol><li>Define target behavior and measurable acceptance criteria.</li><li>Collect approved, representative examples with provenance and usage rights.</li><li>Remove corrupt, duplicate, near-duplicate, conflicting, secret, and disallowed data.</li><li>Normalize into the required training format and add negative, ambiguous, refusal, and edge cases.</li><li>Create entity-, document-, user-, or time-separated train/validation/test splits to prevent leakage.</li><li>Record every transformation, dataset version, license, source, and approval.</li></ol><p>Keep a frozen test set plus a separate adversarial/safety set. Synthetic data may fill controlled gaps, but it should not dominate or reproduce model biases unnoticed.</p>` },
+          { q: "Compare full fine-tuning, LoRA, and quantized LoRA.", tags:["PEFT","LoRA"], a:`<p>Full tuning updates most or all model parameters. It offers high adaptation capacity but requires substantial compute, storage, and a complete new checkpoint.</p><p>LoRA freezes the base model and learns low-rank updates to selected weights, reducing trainable parameters and adapter size. Quantized LoRA further lowers memory by using a quantized base during tuning.</p><p>Selection depends on domain shift, task complexity, data volume, compute, serving constraints, latency, and number of variants. Per-tenant adapters can simplify specialization but complicate batching, caching, capacity, and adapter loading. Compare methods empirically; neither full tuning nor LoRA is universally superior.</p>` },
+          { q: "How do you evaluate a fine-tuned model before release?", tags:["Regression","Release gates"], a:`<p>Compare the production baseline, an improved prompt/few-shot baseline, and the tuned candidate on identical cases. Evaluate task correctness, schema compliance, ambiguous cases, safety/refusal, hallucination, paraphrase robustness, latency, cost, and regressions in general capabilities.</p><p>Use deterministic metrics where possible, calibrated judges for open-ended dimensions, and expert review for high-risk slices. Define hard gates—for example, target-task lift, zero critical safety regression, no unacceptable slice degradation, and acceptable P95 latency/cost. Then shadow, canary, gradually roll out, and preserve instant rollback.</p>` },
+          { q: "How do you prevent overfitting and catastrophic forgetting?", tags:["Training","Robustness"], a:`<ul><li>Use a capable base model and the smallest effective intervention.</li><li>Control learning rate, epochs, early stopping, and regularization.</li><li>Keep training data diverse rather than repeating one template.</li><li>Mix representative general examples when policy permits.</li><li>Prefer parameter-efficient tuning for narrow adaptation.</li><li>Test paraphrases, unseen entities, safety behavior, and general capabilities.</li></ul><p>Warning signs include memorized phrases, excessive confidence, brittle formats, and degradation outside the target distribution. Probe for training-data memorization and sensitive canary strings.</p>` },
+          { q: "How do privacy, retention, and deletion affect fine-tuning architecture?", tags:["Privacy","Unlearning"], a:`<p>Minimize sensitive training data and maintain lineage from every example to its approved source, legal basis, retention rule, and transformations. Protect storage, training jobs, artifacts, and access logs.</p><p>Deletion after training is hard: deleting the source row does not reliably remove its influence from weights. Options include retraining without it or carefully validated machine-unlearning methods. This is why mutable, user-specific, permissioned, or deletion-sensitive facts generally belong in RAG or a system of record—not model weights.</p>` },
+          { q: "How do you version and deploy fine-tuned models?", tags:["MLOps","Deployment"], a:`<p>The release unit includes base model, adapter/checkpoint, tokenizer, dataset, training code and hyperparameters, prompt, safety configuration, and evaluation report.</p><p>A model registry stores lineage, compatibility, approval, and metrics. Release through offline evaluation, security approval, load tests, shadow traffic, canary, and gradual rollout. Monitor slice-level quality, safety, latency, throughput, and cost. Keep the prior model/prompt available for rollback and plan for provider retirement or base-model changes.</p>` }
+        ]
+      },
+      {
+        category: "Caching",
+        challenges: "Safe reuse, complete cache keys, invalidation, semantic false positives, stampedes, tenant isolation, and consistency.",
+        items: [
+          { q: "What can be cached in an enterprise GenAI system?", tags:["Architecture","Latency"], a:`<p>Consider independent caches for parsed documents, OCR, embeddings, retrieval candidates, reranking, prompt prefixes, exact responses, semantic responses, read-only tool results, and identity/ACL decisions.</p><p>Each has a different consistency contract. Embeddings are safe when keyed by normalized content hash and model version. Response and retrieval caches must include security and corpus state. Tool results require domain-specific TTLs. A cache is an optimization—not a source of truth—and every new cache creates an invalidation and privacy obligation.</p>` },
+          { q: "How do you construct a safe RAG response cache key?", tags:["Cache key","Security"], a:`<p>The key must include every behavior-changing input: tenant, authorization fingerprint, normalized query, relevant conversation state, retrieval configuration, corpus/index version, prompt version, model/generation configuration, locale, output format, and guardrail-policy version.</p><p>Use hashes or HMAC fingerprints rather than raw PII. An incomplete key can return content created under the wrong user permission, corpus, policy, prompt, or model. That is a security/correctness defect, not merely a low-quality cache hit.</p>` },
+          { q: "What is semantic caching, and when is it unsafe?", tags:["Semantic cache","Risk"], a:`<p>Semantic caching reuses an answer when a new query is sufficiently similar to an earlier one. It suits stable, low-risk, repetitive FAQs.</p><p>It is unsafe when small wording changes alter intent, entities, time, jurisdiction, permissions, or side effects—such as “Can I cancel?” versus “Cancel my order.” Require matching tenant, auth scope, intent, entities, corpus version, and volatility constraints in addition to embedding similarity. Measure semantic-cache precision, not just hit rate.</p>` },
+          { q: "How do you invalidate caches when content or ACLs change?", tags:["Invalidation","Freshness"], a:`<p>Use versioned keys plus event-driven invalidation. Document events carry tenant, document/version, affected corpus, and ACL change details. Invalidate using dependency mappings, namespace version increments, targeted group invalidation, or conservative TTLs.</p><p>Authorization changes are security-critical: invalidate immediately and recheck authorization at serve time for cached content. Versioned namespaces let stale entries expire without creating a global recomputation storm.</p>` },
+          { q: "How do you prevent cache stampedes and survive cache failure?", tags:["Scale","Resilience"], a:`<p>Use request coalescing/single-flight locks, stale-while-revalidate, TTL jitter, refresh-ahead, rate limiting, backpressure, and safe negative caching.</p><p>The service must degrade if the distributed cache fails: bypass it for essential traffic, lower concurrency, protect downstream models, and avoid uncontrolled retries. Monitor hit ratio, evictions, memory, stale hits, lookup latency, and downstream load amplification.</p>` },
+          { q: "Can agent tool calls be cached?", tags:["Tools","Idempotency"], a:`<p>Cache only safe read-only results with a valid TTL and complete security key. Never cache create, update, delete, send, pay, approve, or reserve operations as a substitute for execution.</p><p>For side effects use an idempotency key. If a timeout occurs after a payment submission, the retry reuses the key and checks the original transaction instead of charging twice.</p><blockquote>Caching reuses results; idempotency prevents duplicate side effects.</blockquote>` }
+        ]
+      },
+      {
+        category: "Evals",
+        challenges: "Representative test sets, component isolation, nondeterminism, agent trajectories, judge calibration, statistical confidence, and release gates.",
+        items: [
+          { q: "How would you design the evaluation architecture for an AI application?", tags:["Evaluation stack"], a:`<p>Evaluate at four levels:</p><ol><li><strong>Components:</strong> classifier, retrieval, reranker, PII detector, tool schema.</li><li><strong>Workflow:</strong> routing, tool selection/arguments/order, state transitions, recovery, and termination.</li><li><strong>Output:</strong> correctness, relevance, faithfulness, completeness, citations, structure, and safety.</li><li><strong>System:</strong> task success, latency, reliability, cost, satisfaction, and business outcome.</li></ol><p>The platform stores versioned cases, slice labels, expected behavior, configuration, evaluator outputs, human labels, and trace links. Run smoke tests per change, full regression before release, and sampled continuous production evaluation.</p>` },
+          { q: "How do you build a representative evaluation dataset?", tags:["Dataset","Coverage"], a:`<p>Combine production requests, expert scenarios, incidents, long-tail cases, adversarial tests, and carefully controlled synthetic coverage. Each case may include identity/tenant, history, expected evidence, required/forbidden tools, arguments, workflow transitions, citations, and risk.</p><p>Split by entity, document, user, or time to prevent leakage. Segment by intent, language, document type, ambiguity, complexity, and safety risk. Match production distribution but overweight rare critical failures so data leakage cannot disappear in an average score.</p>` },
+          { q: "How do you evaluate tool use and agent workflows?", tags:["Agents","Tools"], a:`<p>Measure tool-needed detection, selection accuracy, argument validity, call order, unnecessary calls, result utilization, stopping, and recovery. Use deterministic tool fixtures to simulate timeouts, 429/500 errors, empty or malformed results, lost responses, permission denial, and rejected approval.</p><p>Assert invariants: payment cannot precede identity verification; deletion requires approval; workflows respect call and time budgets. A plausible final answer cannot prove that the internal process was safe.</p>` },
+          { q: "How do you evaluate RAG without hiding the failing stage?", tags:["RAG evals","Diagnosis"], a:`<p>First evaluate retrieval against known evidence using recall@k, precision@k, MRR/nDCG, filters, ACL correctness, freshness, and reranker lift. Then evaluate generation on controlled context for claim support, relevance, completeness, citation correctness, and abstention. Finally run the full pipeline for task success, expert correctness, security leakage, latency, and cost.</p><p>This separation reveals whether failure came from missing evidence, ranking, context assembly, generation, or guardrails.</p>` },
+          { q: "How do you use LLM-as-a-judge safely?", tags:["LLM judge","Calibration"], a:`<p>Use an explicit multi-criterion rubric rather than “Is this answer good?” Provide reference evidence and remove irrelevant model identity. Calibrate agreement against expert labels and inspect disagreements by slice.</p><p>Known biases include verbosity, position, style similarity, self-preference, and missed domain subtleties. Multiple judges or pairwise comparison can improve robustness. Judges scale review but do not replace deterministic checks, experts, or security testing.</p>` },
+          { q: "What release gates should prompt, model, retrieval, or workflow changes pass?", tags:["CI/CD","Release"], a:`<p>Version the prompt, model, retrieval configuration, tool schemas, workflow, guardrail policy, and dataset. Gate releases on zero critical privacy/security violations, acceptable retrieval/citation metrics, statistically acceptable task success, 100% critical workflow invariants, P95 latency, and cost per successful task.</p><p>After offline approval, use shadow traffic, canary, or A/B tests. Maintain explicit automatic rollback thresholds.</p>` },
+          { q: "How do you evaluate nondeterministic behavior?", tags:["Statistics","Robustness"], a:`<p>Use deterministic assertions for schemas, authorization, tool order, IDs, and citations. For probabilistic dimensions, run multiple generations, report variance and worst-case behavior, compare paired examples, track flaky cases, and use confidence intervals.</p><p>A safety-critical request that passes 80% of repeated runs is unreliable even if the average score looks good. Repetition count should reflect risk and cost.</p>` },
+          { q: "How do you prove that a new system is genuinely better?", tags:["Trade-offs","Experimentation"], a:`<p>Compare on the same cases using paired metrics, confidence intervals, critical slices, and production experiments where appropriate. Improvement is multi-objective: task success, safety, latency, cost, and user/business outcome.</p><p>Mandatory security and compliance constraints remain hard gates, not weighted terms. For agents, optimize <strong>cost per successful task</strong>; a cheap failed request is not progress.</p>` }
+        ]
+      },
+      {
+        category: "Observability",
+        challenges: "End-to-end traces, state reconstruction, privacy-safe telemetry, version correlation, asynchronous workflows, debugging, and cost attribution.",
+        items: [
+          { q: "What should an AI execution trace capture?", tags:["Tracing","Telemetry"], a:`<p>Assign one trace ID and spans for model, retrieval, tool, guardrail, cache, and workflow operations. Capture pseudonymous identity/tenant, model/prompt/workflow/index/policy versions, token counts, latency, retrieval query/filters/candidates/scores, ACL decisions, tool arguments/results, retries, state transitions, validation, final citations, feedback, and cost.</p><p>Redact or tokenize sensitive payloads. The trace must answer: what did the system know, what did it decide, what executed, and why did the user receive this result?</p>` },
+          { q: "How do you debug a wrong multi-step AI result?", tags:["Debugging","Root cause"], a:`<p>Reconstruct the trace chronologically: input and identity, routing, state per node, model/prompt version, retrieved evidence, tool choice/arguments, tool semantic validation, state mutation, guardrails, and final assembly. Compare against a similar successful trace.</p><p>Classify divergence as intent, context, retrieval, tool, schema, semantic tool result, state transition, lost response, loop, early stop, model regression, timeout, or ACL defect. Replay with pinned versions and mocked dependencies. Add the incident to regression tests before fixing it.</p>` },
+          { q: "What is the difference between workflow state and model context?", tags:["State","Context"], a:`<p><strong>Workflow state</strong> is authoritative structured application data: completed steps, tool results, approvals, retry counters, transaction IDs, errors, and valid transitions.</p><p><strong>Model context</strong> is a minimal projection for one model call: instructions, relevant turns, evidence, tool definitions, and only the state needed by that step.</p><p>Define typed state and node input/output contracts. Persist durable checkpoints for long-running work, but construct model context per step to control cost, distraction, and exposure.</p>` },
+          { q: "How do you persist information beyond one interaction?", tags:["Memory","Persistence"], a:`<p>Separate explicit preferences, conversation summaries, business records, workflow checkpoints, semantic memory, and audit events. They need different stores, retention, provenance, and trust.</p><p>Business truth stays in systems of record; workflow state in a durable database; semantic memories in a scoped store; audit events in append-oriented infrastructure. Validate memory writes, obtain consent where necessary, apply authorization at retrieval, and support expiry, supersession, correction, and deletion. A remembered user statement is not automatically authoritative fact.</p>` },
+          { q: "How do you safely log prompts and model outputs?", tags:["Privacy","Logging"], a:`<p>Full logging improves diagnosis but creates another sensitive store. Use field classification, pre-log redaction/tokenization, restricted payload storage, short raw-content retention, role-based access, encryption, regional controls, trace-access audit, sampling, and an emergency logging kill switch.</p><p>Retain operational metadata longer than content. Tools use server-side credentials; secrets never enter the model prompt.</p>` },
+          { q: "How do you observe tool correctness at high request volume?", tags:["Tools","Scale"], a:`<p>Aggregate tool-call rate, selection accuracy from sampled evals, invalid arguments, timeouts, errors, latency percentiles, retries, calls per workflow, repeated calls, semantic validation failures, and downstream task success.</p><p>Distinguish transport success, schema success, semantic success, and agent success. HTTP 200 proves only transport/application handling—not that the right tool returned useful data at the right time.</p>` },
+          { q: "How do you attribute and control AI cost?", tags:["FinOps","Budgets"], a:`<p>Attribute input/output/cached/reasoning tokens, embeddings, rerankers, search, tools, and model steps by request, tenant, user, feature, workflow, and model. Track cost per request, successful task, and resolved conversation.</p><p>Connect cost to quality traces to expose expensive steps that add no value. Enforce runtime budgets for tokens, calls, retrieval operations, tools, and wall time. Use this data for routing, anomaly detection, quota planning, and chargeback.</p>` }
+        ]
+      },
+      {
+        category: "User Feedback Loops",
+        challenges: "Actionable signals, trace linkage, bias and abuse, expert validation, remediation, and converting production failures into evaluated improvements.",
+        items: [
+          { q: "How would you design a useful user-feedback system?", tags:["Product","Signals"], a:`<p>Collect explicit feedback—rating, reason code, free-text correction, wrong source, unsupported citation, unsafe response—and implicit signals such as reformulation, repeated question, abandonment, citation click, escalation, action reversal, and task completion.</p><p>Link every event to the exact trace, response, versions, retrieval, tool sequence, user segment, and timestamp. Do not optimize only thumbs-up rate; users can like fluent but incorrect answers. Route feedback into retrieval, generation, tool, UX, policy, or infrastructure failure categories.</p>` },
+          { q: "How do you turn feedback into production improvements?", tags:["Continuous improvement"], a:`<ol><li>Retrieve the linked trace and protect sensitive data.</li><li>Classify and prioritize by severity, frequency, and business impact.</li><li>Have experts validate uncertain/high-risk cases.</li><li>Convert validated cases into permanent regression tests.</li><li>Select the correct intervention: document, retrieval, prompt, tool, workflow, guardrail, UX, routing, or tuning.</li><li>Evaluate offline, deploy experimentally, and measure recurrence plus regressions.</li></ol><blockquote>Feedback is evidence—not automatically a training label.</blockquote>` },
+          { q: "Would you fine-tune directly on user feedback?", tags:["Data quality","Fine-tuning"], a:`<p>No. Raw feedback may be incorrect, malicious, duplicated, biased, incomplete, or contaminated with PII and secrets. Require policy approval, consent where needed, deduplication, privacy processing, provenance, expert or consensus validation, and balanced sampling.</p><p>First convert high-value cases into evaluation data. Fine-tune only when validated feedback reveals a repeated behavioral pattern that prompting, retrieval, tools, or product changes cannot solve more safely.</p>` },
+          { q: "How do you prevent feedback metrics from misleading the team?", tags:["Analytics","Bias"], a:`<p>Feedback has selection bias because only some users respond. Segment response rate and ratings by cohort, intent, difficulty, language, feature, reason code, task outcome, reformulation, and escalation.</p><p>Do not compare raw thumbs-up rates when traffic mix changes. Use randomized experiments, matched cohorts, or propensity-aware analysis where feasible. For high-risk domains, expert correctness remains primary even when satisfaction is high.</p>` },
+          { q: "What does it mean to close the user-feedback loop?", tags:["Operations","Remediation"], a:`<p>There are two loops. The short operational loop corrects the current issue: update a source, reverse an action, escalate, notify affected users, and record resolution. The longer engineering loop turns the failure into an evaluation, improves the system, and verifies non-recurrence.</p><p>A feedback dashboard without ownership, severity, remediation deadlines, and verified outcomes is not a closed loop.</p>` }
+        ]
+      },
+      {
+        category: "Guardrails",
+        challenges: "Defense in depth, deterministic authorization, PII and secrets, prompt injection, tool governance, structured contracts, approvals, and auditability.",
+        items: [
+          { q: "What governance guardrails would you establish for enterprise AI?", tags:["Governance","Defense in depth"], a:`<p>Use layers: identity/RBAC/ABAC/tenant isolation; input validation and malware/PII/injection detection; authorization-aware retrieval and trusted-source policy; approved/versioned models and prompts; tool allowlists, schemas, least privilege, rate limits and workflow constraints; output schema, DLP, grounding and business validation; plus lineage, retention, audit, access review, and incident response.</p><p>The LLM may decide flexibly only within these deterministic boundaries.</p>` },
+          { q: "How would you implement PII masking end to end?", tags:["PII","Privacy"], a:`<p>Clarify whether the model, logs, output, or all three must be protected and whether re-identification is required. Detect entities, classify type/confidence, replace with stable placeholders, and—only when necessary—store mappings in an encrypted scoped store. Send masked input, rehydrate only authorized values, and scan output and logs independently.</p><p>Combine regex/checksum recognizers, context-aware NER, dictionaries, and domain rules. Evaluate precision and recall by entity type because the risk of missing an account number differs from masking an organization name.</p>` },
+          { q: "How would you deploy and use Microsoft Presidio?", tags:["Presidio","In-house"], a:`<p>Deploy Presidio’s analyzer and anonymizer as an internal service so raw sensitive content remains client-controlled. Add custom recognizers for company IDs, employee IDs, clinical entities, and regional identifiers. A policy layer decides which entities each application/user role must redact, hash, encrypt, or replace.</p><p>Evaluate on domain documents, tune thresholds/context words, OCR images first, version recognizers, and monitor false positives/negatives. For long documents, use boundary overlap and preserve offset mappings. Presidio is one layer; scan outputs and logs separately.</p>` },
+          { q: "How do you enforce tool-call order?", tags:["Workflow","State machine"], a:`<p>Encode required sequences as a state machine or graph. Store verified prerequisites, completed steps, approvals, and transaction state. Expose only currently valid transitions and have deterministic code check permission, preconditions, state version, idempotency, budgets, and postconditions.</p><blockquote>The model proposes the next valid action; the workflow validates and executes it.</blockquote>` },
+          { q: "How do you prevent infinite agent or tool loops?", tags:["Agents","Budgets"], a:`<p>Enforce hard maximums for workflow iterations, model calls, total/per-tool calls, tokens, cost, and wall time. Detect lack of progress through repeated normalized calls, unchanged state, oscillating states, repeated evidence, and errors without a new recovery strategy.</p><p>Terminate safely, return partial results, use a deterministic fallback, or escalate. The LLM may signal completion but is never the sole stopping control.</p>` },
+          { q: "What if a tool returns HTTP 200 with an unusable result?", tags:["Validation","Tools"], a:`<p>Validate four levels: transport, schema, semantic/domain rules, and business outcome. Check required fields, ranges, record existence, cross-field invariants, freshness, and authorization. Tag results as validated, incomplete, invalid, or uncertain before adding them to state.</p><p>For high-value operations, verify postconditions through an independent status/read endpoint. Technical success does not imply semantic correctness.</p>` },
+          { q: "How do you make LLM output safe for downstream code?", tags:["Structured output","Contracts"], a:`<p>Prefer provider-native constrained output, then JSON Schema/Pydantic validation, deterministic parsing, business validation, bounded repair/retry, and fallback or human review.</p><p>Validate more than types: date ranges, supported currencies, existing IDs, enums allowed in the current workflow, mathematical invariants, and evidence references. Downstream actions never execute directly from unchecked natural language.</p>` },
+          { q: "How do you pause for human approval and safely resume?", tags:["Human in the loop","Durability"], a:`<p>Persist a durable checkpoint containing workflow/state version, proposed action, validated parameters, evidence, requester, approver role, expiry, and idempotency key. Record the authorized approver’s decision and timestamp.</p><p>On resume, verify identity/role, approval integrity, expiry, current permissions, and whether data changed while paused. If parameters or material state changed, require new approval. Durable state survives restarts; rejection and expiry are explicit workflow paths.</p>` },
+          { q: "How do you secure a multi-agent architecture?", tags:["Multi-agent","Least privilege"], a:`<p>Treat each agent as a constrained service role with minimal tools/data, typed contracts, permitted transitions, budgets, and distinct identity where needed. Validate inter-agent messages as untrusted data. A supervisor may route, but the runtime enforces permissions and transitions.</p><p>Prefer deterministic orchestration for known business processes and model-driven routing only where ambiguity adds value. Extra agents add latency, cost, failure paths, injection surfaces, and debugging complexity.</p>` }
+        ]
+      },
+      {
+        category: "Monitoring",
+        challenges: "SLIs/SLOs, quality signals, drift, scale, retries, capacity, alerting, safe degradation, and incident response.",
+        items: [
+          { q: "Differentiate monitoring, observability, and evaluation.", tags:["Operations","Definitions"], a:`<p><strong>Monitoring</strong> alerts when predefined health conditions or SLOs are violated. <strong>Observability</strong> provides traces, logs, metrics, versions, and state needed to explain unanticipated behavior. <strong>Evaluation</strong> measures whether AI behavior is correct, useful, grounded, and safe.</p><p>Monitoring may show a tool timeout spike; observability identifies the provider/region/change; evaluation shows whether fallback answers became incomplete.</p>` },
+          { q: "What would you monitor for an enterprise chatbot or agent?", tags:["Metrics","Dashboard"], a:`<ul><li><strong>Traffic:</strong> RPS, concurrency, success, queue depth, throttling.</li><li><strong>Latency:</strong> end-to-end, first token, retrieval, model, tools, guardrails.</li><li><strong>Reliability:</strong> errors, timeouts, retries, circuit breakers, dead letters, duplicate side effects.</li><li><strong>Quality:</strong> task success, grounding, citations, tool choice, refusals, escalation, feedback.</li><li><strong>Safety:</strong> injection, PII, cross-tenant attempts, blocked calls, policy violations.</li><li><strong>Cost:</strong> tokens, model steps, cache hits, cost per successful task and tenant.</li></ul><p>Segment by versions, tenant, language, region, feature, model, and intent.</p>` },
+          { q: "Design deployment for hundreds of thousands of users.", tags:["Scale","Deployment"], a:`<p>Use global/regional load balancing, an API gateway, authentication, quotas, stateless orchestrators, a model gateway, distributed cache, horizontally scalable retrieval, durable state, and queues/workers for long tasks.</p><p>Apply operation deadlines, retry budgets, jittered backoff, circuit breakers, bulkheads, load shedding, backpressure, idempotency, and permitted multi-deployment fallback. Prevent nested retries from amplifying load. Capacity-plan peak RPS, P99 token volume, provider quotas, retrieval throughput, connection pools, queues, and streaming connections. Validate with load, soak, chaos, and recovery tests.</p>` },
+          { q: "How do you handle retries, timeouts, and network failures?", tags:["Resilience","Errors"], a:`<p>Give every dependency a timeout smaller than the remaining end-to-end deadline. Retry only transient errors such as selected 429/502/503/network failures, respect Retry-After, and use exponential backoff with jitter. Do not retry deterministic validation or authorization errors.</p><p>Side-effect retries require idempotency and status checks. Centralize the retry budget to prevent multiplicative retries. After repeated failures, open a circuit and route to an approved fallback, cached safe response, partial result, queue, or explicit failure. Evaluate fallback quality rather than assuming any answer is better than none.</p>` },
+          { q: "What SLOs would you define for enterprise GenAI?", tags:["SLO","Reliability"], a:`<p>Define infrastructure, behavior, safety, and economic objectives: availability; P95 first-token and end-to-end latency; tool timeouts; retrieval recall; citation correctness; structured-output validity; task success; and cost per successful task.</p><p>Security invariants such as cross-tenant leakage are hard zero-tolerance controls, not error-budget items. Reliability error budgets can regulate deployment pace when instability grows.</p>` },
+          { q: "How do you detect data, retrieval, model, and outcome drift?", tags:["Drift","Detection"], a:`<p>Monitor input topics/languages/length/entities; retrieval scores, zero results, sources, duplicates, and freshness; model refusals, tool rates, output length, schema failures, grounding and safety; plus outcome task success, reformulations, escalation, feedback, and resolution.</p><p>A distribution shift is not automatically harm. It triggers slice-specific evaluation. Periodic fixed canary queries can also reveal silent provider or dependency behavior changes.</p>` },
+          { q: "How do you monitor tool selection, order, and loop behavior?", tags:["Agents","Tool monitoring"], a:`<p>Track tool choice by intent, calls per request, P95/max calls, invalid arguments, policy rejections, duplicate calls, retries, transition violations, budget termination, and unused results. Runtime state machines reject invalid order; sampled evaluators assess whether the correct valid tool was chosen.</p><p>A rise in calls per request may indicate prompt/model regression, ambiguous tool descriptions, unusable results, routing problems, or dependency instability. Correlate to every behavioral version.</p>` },
+          { q: "How do you monitor RAG quality without production ground truth?", tags:["RAG","Online quality"], a:`<p>Triangulate proxies: zero results, low reranker confidence, duplicates, source anomalies, citation coverage, unsupported-claim detection, reformulation, citation clicks, and escalation. Run asynchronous relevance/grounding evaluation on samples and route risky or low-confidence cases to experts.</p><p>Maintain known-answer canary queries and continuously convert verified production failures into labeled evaluation cases. No single proxy proves correctness.</p>` },
+          { q: "What is your AI incident-response process?", tags:["Incident response","Operations"], a:`<ol><li>Detect and classify severity: leakage, harmful output, unauthorized action, quality regression, outage, latency, or cost.</li><li>Contain with feature/tool kill switches, rollback, traffic reduction, or safe degraded mode.</li><li>Preserve traces and identify affected users, tenants, and versions.</li><li>Restore service and remediate external side effects.</li><li>Complete root-cause analysis, add regression/adversarial tests, improve controls, and communicate as required.</li></ol><p>Maintain per-tool kill switches so irreversible actions can stop without disabling safe read-only service.</p>` }
+        ]
+      }
+    ];
+
+    const CROSS = [
+      { category:"Cross-Dimensional", q:"A RAG chatbot hallucinates more after a model upgrade. How do you investigate?", tags:["Incident","Regression"], a:`<p>Freeze configurations and compare old/new versions on identical traces. Inspect retrieval, context ordering, prompt rendering, context limits, citations, guardrails, and cache versioning. Run retrieval-only evaluation, generation on fixed context, end-to-end paired evaluation, and slice analysis.</p><p>The model may react differently to irrelevant context, but a stale cache or prompt change could be responsible. Fix the actual stage, canary the solution, preserve rollback, and add the incident as a permanent regression test.</p>` },
+      { category:"Cross-Dimensional", q:"How do you balance low latency with highly confidential data?", tags:["Security","Latency"], a:`<p>Security remains a hard constraint. Partition indexes where appropriate, use authorization-aware retrieval, minimize context, cache only safely scoped computation, keep entitlement TTLs short, use compliant regional deployments, parallelize independent safe work, rerank selectively, and stream output.</p><p>Do not remove authorization checks or reuse private answers across users to improve latency. Optimize inside the security boundary.</p>` },
+      { category:"Cross-Dimensional", q:"When should a workflow be deterministic, agentic, or hybrid?", tags:["Architecture","Agents"], a:`<p>Use deterministic workflows when steps are known, actions are regulated or irreversible, and auditability dominates. Use agentic choice for ambiguous inputs, variable information gathering, and reversible exploration.</p><p>Most enterprise systems are hybrid: the LLM interprets intent, extracts parameters, selects among permitted options, and synthesizes; deterministic code enforces identity, permissions, schemas, state transitions, budgets, approvals, and transactions.</p>` },
+      { category:"Cross-Dimensional", q:"Give your Principal-level philosophy for production AI architecture.", tags:["Executive answer","Principles"], a:`<p>I design enterprise AI as a governed distributed system containing a probabilistic component. The LLM handles language, flexible reasoning, and generation; deterministic services handle authorization, workflow, schemas, business rules, persistence, and irreversible actions.</p><p>I separately evaluate retrieval, output, tools, workflow decisions, safety, latency, and cost. Every behavioral artifact is versioned; executions are traceable and bounded; releases use regression gates and controlled rollout. Feedback and incidents become validated evaluations before they drive improvement.</p><blockquote>The objective is not an impressive answer. It is an authorized, grounded, measurable, reliable, and operable outcome.</blockquote>` }
+    ];
+
+    const QUESTIONS = [];
+    DATA.forEach(section => section.items.forEach(item => QUESTIONS.push({...item, category: section.category, challenges: section.challenges})));
+    CROSS.forEach(item => QUESTIONS.push({...item, challenges:"Connect quality, security, reliability, economics, and operations in one architectural decision."}));
+    QUESTIONS.forEach((q, i) => q.id = `q-${i+1}`);
+
+    const STORE_KEY = "arpit-ai-architecture-os-v1";
+    let saved;
+    try { saved = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { saved = {}; }
+    const state = {
+      category: "All",
+      query: "",
+      status: "all",
+      mode: "browse",
+      mastered: new Set(saved.mastered || []),
+      bookmarked: new Set(saved.bookmarked || []),
+      notes: saved.notes || {},
+      flashIndex: 0
+    };
+
+    const els = {
+      list: document.getElementById("questionList"), chips: document.getElementById("chips"),
+      search: document.getElementById("searchInput"), status: document.getElementById("statusFilter"),
+      count: document.getElementById("resultCount"), empty: document.getElementById("emptyState"),
+      total: document.getElementById("totalStat"), mastered: document.getElementById("masteredStat"),
+      progress: document.getElementById("progressStat"), bar: document.getElementById("progressBar"),
+      flashCategory: document.getElementById("flashCategory"), flashCounter: document.getElementById("flashCounter"),
+      flashQuestion: document.getElementById("flashQuestion"), flashAnswer: document.getElementById("flashAnswer"),
+      reveal: document.getElementById("revealFlash"), masterFlash: document.getElementById("masterFlash"),
+      toast: document.getElementById("toast")
+    };
+
+    function persist() {
+      localStorage.setItem(STORE_KEY, JSON.stringify({mastered:[...state.mastered], bookmarked:[...state.bookmarked], notes:state.notes}));
+      updateStats();
+    }
+    function updateStats() {
+      const percent = Math.round(state.mastered.size / QUESTIONS.length * 100);
+      els.total.textContent = QUESTIONS.length;
+      els.mastered.textContent = state.mastered.size;
+      els.progress.textContent = `${percent}%`;
+      els.bar.style.width = `${percent}%`;
+    }
+    function filteredQuestions() {
+      const query = state.query.trim().toLowerCase();
+      return QUESTIONS.filter(item => {
+        if (state.category !== "All" && item.category !== state.category) return false;
+        if (state.status === "mastered" && !state.mastered.has(item.id)) return false;
+        if (state.status === "unmastered" && state.mastered.has(item.id)) return false;
+        if (state.status === "bookmarked" && !state.bookmarked.has(item.id)) return false;
+        if (!query) return true;
+        const plain = `${item.q} ${item.category} ${item.tags.join(" ")} ${item.a.replace(/<[^>]+>/g," ")}`.toLowerCase();
+        return plain.includes(query);
+      });
+    }
+    function escapeRx(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+    function highlight(text) {
+      const q = state.query.trim();
+      if (!q || q.length < 2) return text;
+      return text.replace(new RegExp(`(${escapeRx(q)})`, "ig"), "<mark>$1</mark>");
+    }
+    function renderChips() {
+      const cats = ["All", ...DATA.map(x => x.category), "Cross-Dimensional"];
+      els.chips.innerHTML = cats.map(cat => `<button class="chip ${state.category===cat?"active":""}" data-category="${cat}">${cat}</button>`).join("");
+      els.chips.querySelectorAll(".chip").forEach(btn => btn.addEventListener("click", () => {
+        state.category = btn.dataset.category; state.flashIndex = 0; renderChips(); render();
+      }));
+    }
+    function render() {
+      const items = filteredQuestions();
+      els.count.textContent = `${items.length} ${items.length === 1 ? "question" : "questions"}`;
+      els.empty.style.display = items.length ? "none" : "block";
+      els.list.innerHTML = items.map(item => {
+        const globalIndex = QUESTIONS.indexOf(item) + 1;
+        const mastered = state.mastered.has(item.id), bookmarked = state.bookmarked.has(item.id);
+        return `<article class="question-card ${mastered?"mastered":""}" data-id="${item.id}">
+          <button class="question-head" aria-expanded="false">
+            <span class="q-number">${String(globalIndex).padStart(2,"0")}</span>
+            <span class="q-title-wrap"><span class="q-title">${highlight(item.q)}</span><span class="q-meta"><span class="tag">${item.category}</span>${item.tags.map(t=>`<span>${t}</span>`).join(" · ")}</span></span>
+            <span class="chevron">⌄</span>
+          </button>
+          <div class="answer"><div class="answer-inner">${highlight(item.a)}
+            <div class="answer-actions">
+              <button class="bookmark-btn bookmark ${bookmarked?"active":""}">${bookmarked?"★ Bookmarked":"☆ Bookmark"}</button>
+              <button class="bookmark-btn master-btn ${mastered?"active":""}">${mastered?"✓ Mastered":"Mark mastered"}</button>
+              <button class="bookmark-btn copy-btn">Copy answer</button>
+            </div>
+            <textarea class="note" placeholder="Add your personal example, metric, or project story…" aria-label="Personal notes">${state.notes[item.id] || ""}</textarea>
+          </div></div>
+        </article>`;
+      }).join("");
+      wireCards();
+      if (state.mode === "flash") renderFlash();
+    }
+    function wireCards() {
+      els.list.querySelectorAll(".question-card").forEach(card => {
+        const id = card.dataset.id, item = QUESTIONS.find(q=>q.id===id), head = card.querySelector(".question-head");
+        head.addEventListener("click", () => { const open = card.classList.toggle("open"); head.setAttribute("aria-expanded", open); });
+        card.querySelector(".bookmark").addEventListener("click", () => { state.bookmarked.has(id)?state.bookmarked.delete(id):state.bookmarked.add(id); persist(); render(); });
+        card.querySelector(".master-btn").addEventListener("click", () => { state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id); persist(); render(); toast(state.mastered.has(id)?"Marked as mastered":"Moved back to revision"); });
+        card.querySelector(".copy-btn").addEventListener("click", async () => { await navigator.clipboard.writeText(`${item.q}\n\n${strip(item.a)}`); toast("Answer copied"); });
+        card.querySelector(".note").addEventListener("input", e => { state.notes[id] = e.target.value; clearTimeout(window.noteTimer); window.noteTimer=setTimeout(persist,300); });
+      });
+    }
+    function strip(html) { const d=document.createElement("div"); d.innerHTML=html; return d.innerText; }
+    function setMode(mode) {
+      state.mode = mode; document.body.classList.toggle("flash-mode", mode === "flash");
+      document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.mode===mode));
+      state.flashIndex=0; render();
+    }
+    function renderFlash() {
+      const items = filteredQuestions();
+      if (!items.length) { els.empty.style.display="block"; return; }
+      state.flashIndex = (state.flashIndex + items.length) % items.length;
+      const item = items[state.flashIndex];
+      els.flashCategory.textContent = `${item.category} · ${item.tags.join(" · ")}`;
+      els.flashCounter.textContent = `${state.flashIndex+1} / ${items.length}`;
+      els.flashQuestion.textContent = item.q;
+      els.flashAnswer.innerHTML = item.a;
+      els.flashAnswer.classList.remove("show");
+      els.reveal.textContent = "Reveal answer";
+      const done=state.mastered.has(item.id); els.masterFlash.textContent=done?"✓ Mastered":"Mark mastered"; els.masterFlash.classList.toggle("active",done);
+    }
+    function moveFlash(delta) { state.flashIndex += delta; renderFlash(); }
+    function toggleReveal() { const show=els.flashAnswer.classList.toggle("show"); els.reveal.textContent=show?"Hide answer":"Reveal answer"; }
+    function toast(message) { els.toast.textContent=message; els.toast.classList.add("show"); clearTimeout(window.toastTimer); window.toastTimer=setTimeout(()=>els.toast.classList.remove("show"),1600); }
+
+    els.search.addEventListener("input", e => { state.query=e.target.value; state.flashIndex=0; render(); });
+    els.status.addEventListener("change", e => { state.status=e.target.value; state.flashIndex=0; render(); });
+    document.querySelectorAll(".mode-btn").forEach(btn => btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
+    document.getElementById("prevFlash").addEventListener("click",()=>moveFlash(-1));
+    document.getElementById("nextFlash").addEventListener("click",()=>moveFlash(1));
+    els.reveal.addEventListener("click",toggleReveal);
+    els.masterFlash.addEventListener("click",()=>{ const items=filteredQuestions(); if(!items.length)return; const id=items[state.flashIndex].id; state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id); persist(); renderFlash(); });
+    document.getElementById("randomBtn").addEventListener("click",()=>{ const items=filteredQuestions(); if(!items.length)return; setMode("flash"); state.flashIndex=Math.floor(Math.random()*items.length); renderFlash(); });
+    document.getElementById("printBtn").addEventListener("click",()=>window.print());
+    document.addEventListener("keydown", e => {
+      if (e.key==="/" && document.activeElement!==els.search) { e.preventDefault(); els.search.focus(); }
+      if (state.mode==="flash" && !["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) {
+        if(e.key.toLowerCase()==="j" || e.key==="ArrowRight") moveFlash(1);
+        if(e.key.toLowerCase()==="k" || e.key==="ArrowLeft") moveFlash(-1);
+        if(e.code==="Space") { e.preventDefault(); toggleReveal(); }
+      }
+    });
+    renderChips(); updateStats(); render();
+  </script>
+</body>
+</html>
