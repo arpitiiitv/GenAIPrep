@@ -171,9 +171,163 @@
       .chevron { grid-column: 2; grid-row: 1; }
       .flash-card { min-height: 520px; }
     }
+    /* V2 — executive editorial workspace */
+    :root {
+      --bg: #f4f5f7; --surface: #ffffff; --surface-2: #f8f9fb; --surface-3: #eef1f5;
+      --text: #172033; --muted: #687386; --border: #dfe3e9; --gold: #2356d8;
+      --gold-2: #173ea6; --cyan: #2356d8; --green: #17815f; --red: #c53b4c;
+      --shadow: 0 14px 38px rgba(23,32,51,.08); --radius: 14px;
+    }
+    body { background: var(--bg); color: var(--text); line-height: 1.65; }
+    .app { display: grid; grid-template-columns: 288px minmax(0,1fr); min-height: 100vh; }
+    .sidebar { position: fixed; inset: 0 auto 0 0; width: 288px; display: flex; flex-direction: column; background: #111827; color: #f7f8fb; padding: 26px 20px 20px; z-index: 30; }
+    .side-brand { display:flex; align-items:center; gap:12px; padding:0 8px 24px; border-bottom:1px solid rgba(255,255,255,.1); }
+    .side-monogram { width:40px; height:40px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.18); background:#1c2638; color:#fff; font-weight:750; letter-spacing:-.04em; border-radius:10px; }
+    .side-name { font-weight:720; letter-spacing:-.02em; }
+    .side-role { color:#98a3b6; font-size:12px; margin-top:1px; }
+    .side-label { padding:24px 10px 9px; color:#7f8a9d; font-size:11px; font-weight:750; text-transform:uppercase; letter-spacing:.12em; }
+    .chips { display:flex; flex-direction:column; gap:2px; padding:0; overflow:auto; scrollbar-width:thin; }
+    .chip { display:grid; grid-template-columns:24px 1fr auto; align-items:center; width:100%; padding:9px 10px; border:0; border-radius:8px; background:transparent; color:#aeb7c7; text-align:left; font-size:13px; }
+    .chip:hover { background:rgba(255,255,255,.055); border-color:transparent; color:#fff; }
+    .chip.active { background:#263348; color:#fff; border:0; }
+    .chip-index { color:#6f7b8f; font-variant-numeric:tabular-nums; }
+    .chip.active .chip-index { color:#8fb0ff; }
+    .chip-count { color:#727f93; font-size:11px; }
+    .side-bottom { margin-top:auto; padding-top:18px; border-top:1px solid rgba(255,255,255,.1); }
+    .side-progress-line { display:flex; justify-content:space-between; color:#aeb7c7; font-size:12px; margin:0 5px 9px; }
+    .sidebar .progress-shell { margin:0 5px 16px; background:rgba(255,255,255,.1); height:4px; }
+    .sidebar .progress-bar { background:#789cf8; }
+    .side-links { display:flex; gap:8px; padding:0 5px; }
+    .side-links a { color:#98a3b6; font-size:12px; text-decoration:none; }
+    .side-links a:hover { color:#fff; }
+    .workspace { grid-column:2; min-width:0; }
+    .topbar { position:sticky; top:0; z-index:20; border-bottom:1px solid var(--border); background:rgba(255,255,255,.91); backdrop-filter:blur(16px); }
+    .topbar-inner { width:min(1120px,calc(100% - 48px)); min-height:64px; }
+    .mobile-menu { display:none; }
+    .mobile-brand { display:none; font-weight:750; }
+    .breadcrumbs { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; }
+    .breadcrumbs strong { color:var(--text); font-weight:650; }
+    .btn, .icon-btn, .mode-btn, .bookmark-btn { border:1px solid var(--border); color:var(--text); background:#fff; border-radius:8px; box-shadow:none; }
+    .btn { padding:8px 12px; font-size:13px; }
+    .btn:hover, .icon-btn:hover, .mode-btn:hover, .bookmark-btn:hover { border-color:#b9c0ca; background:#f7f8fa; }
+    .btn.primary { color:#fff; background:#172033; border-color:#172033; }
+    .btn.primary:hover { background:#27334a; }
+    .icon-btn { width:36px; height:36px; }
+    .hero { padding:58px 0 30px; border:0; }
+    .hero-inner, .main { width:min(1000px,calc(100% - 56px)); }
+    .eyebrow { color:var(--gold); letter-spacing:.12em; font-size:11px; }
+    h1 { margin:12px 0 14px; max-width:840px; color:#111827; font-family:Georgia,"Times New Roman",serif; font-weight:500; font-size:clamp(40px,5vw,64px); line-height:1.08; letter-spacing:-.045em; }
+    .hero p { color:#5f6a7d; max-width:750px; font-size:17px; }
+    .identity { margin-top:20px; color:var(--muted); }
+    .identity a { border:0; color:#36445c; }
+    .identity a:hover { color:var(--gold); }
+    .stats { margin-top:34px; padding:18px 0; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+    .stat { padding:0 22px; border:0; border-right:1px solid var(--border); border-radius:0; background:transparent; }
+    .stat:first-child { padding-left:0; }
+    .stat:last-child { border-right:0; }
+    .stat-value { color:#111827; font-size:24px; }
+    .stat-label { margin-top:2px; color:#7b8494; font-size:10px; }
+    .main { padding:0 0 84px; }
+    .controls { top:78px; padding:0 0 18px; border:0; border-radius:0; background:var(--bg); backdrop-filter:none; box-shadow:none; }
+    .control-row { grid-template-columns:minmax(260px,1fr) 180px auto; }
+    .search, select { height:42px; background:#fff; border-color:var(--border); border-radius:8px; color:var(--text); }
+    .search { padding-left:40px; }
+    .search-wrap span { color:#788395; }
+    .mode-switch { gap:2px; padding:3px; background:#e8ebef; border:0; border-radius:9px; }
+    .mode-btn { border:0; padding:6px 13px; background:transparent; color:#6b7586; }
+    .mode-btn.active { background:#fff; color:#172033; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+    .mobile-category { display:none; }
+    .result-meta { margin:5px 0 12px; color:#768193; }
+    .dimension-context { display:none; margin:4px 0 22px; padding:14px 16px; border-left:3px solid #8aa7ef; background:#edf2fb; color:#4b5870; font-size:13px; }
+    .dimension-context.show { display:block; }
+    .dimension-context strong { color:#243553; }
+    .question-list { gap:0; border-top:1px solid var(--border); }
+    .question-card { border:0; border-bottom:1px solid var(--border); border-radius:0; background:transparent; overflow:visible; }
+    .question-card:hover { border-color:var(--border); background:rgba(255,255,255,.45); }
+    .question-card.mastered { border-color:var(--border); }
+    .question-head { padding:22px 8px; grid-template-columns:42px 1fr auto; gap:14px; }
+    .q-number { color:#98a1b0; font-size:12px; font-variant-numeric:tabular-nums; padding-top:4px; }
+    .q-title { color:#1b2435; font-size:16px; font-weight:650; }
+    .q-meta { margin-top:8px; gap:8px; color:#7c8797; }
+    .tag { border:0; background:#e9edf4; color:#42506a; padding:2px 8px; }
+    .mastered .tag:first-child { background:#e3f2ec; color:#1a6d52; }
+    .chevron { color:#8791a2; }
+    .answer { padding:0 44px 28px 64px; }
+    .answer-inner { padding-top:24px; color:#3f4a5c; border-top:1px solid #e5e8ed; max-width:840px; }
+    .answer h4 { color:#172033; font-size:11px; }
+    .answer strong { color:#202a3c; }
+    .answer-label { display:block; margin:0 0 12px; color:#2356d8; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.14em; }
+    .principal-expansion { margin-top:24px; padding-top:22px; border-top:1px solid #e2e6ec; }
+    .principal-expansion > h4 { margin-top:0; }
+    .answer-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:14px 0; }
+    .deep-block { padding:14px 15px; background:#f7f8fa; border:1px solid #e3e6eb; border-radius:8px; }
+    .deep-block.measure { grid-column:1 / -1; }
+    .deep-block h4 { margin:0 0 7px; }
+    .deep-block ul { margin-bottom:0; }
+    .followup-list { margin:12px 0 0; padding:12px 16px 12px 34px; background:#f4f7fd; border-left:2px solid #8ba8ee; }
+    .answer blockquote { border-left:2px solid var(--gold); color:#243c78; background:#eef3ff; border-radius:0 8px 8px 0; }
+    .answer code { color:#b4233e; background:#f7eaed; }
+    pre { position:relative; overflow:auto; margin:16px 0; padding:18px 20px; color:#d9e2f2; background:#111827; border-radius:10px; font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+    pre code { padding:0; color:inherit; background:transparent; }
+    .code-keyword { color:#93c5fd; } .code-string { color:#a7f3d0; } .code-comment { color:#7c8ba1; } .code-class { color:#fcd58a; }
+    .answer-actions { padding-top:4px; }
+    .bookmark-btn { padding:7px 10px; color:#667184; font-size:12px; }
+    .bookmark-btn.active { color:#194bbb; background:#edf2ff; border-color:#c9d7fb; }
+    .master-btn.active { color:#137052; background:#eaf7f1; border-color:#bce7d5; }
+    .note { background:#fff; border-color:var(--border); color:var(--text); border-radius:8px; font-size:13px; }
+    .flash-card { min-height:520px; padding:clamp(30px,5vw,58px); border:1px solid var(--border); border-radius:16px; background:#fff; box-shadow:var(--shadow); }
+    .flash-question { color:#111827; font-family:Georgia,"Times New Roman",serif; font-weight:500; font-size:clamp(30px,4vw,48px); }
+    .flash-answer { color:#3f4a5c; }
+    .data-actions { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:38px; padding-top:20px; border-top:1px solid var(--border); }
+    .data-actions .spacer { flex:1; }
+    .data-note { color:var(--muted); font-size:12px; }
+    .file-input { display:none; }
+    .toast { background:#172033; color:#fff; border-radius:8px; box-shadow:var(--shadow); }
+    .mobile-overlay { display:none; }
+    @media (max-width: 980px) {
+      .app { display:block; }
+      .sidebar { transform:translateX(-100%); transition:transform .22s ease; box-shadow:30px 0 80px rgba(0,0,0,.24); }
+      body.nav-open .sidebar { transform:translateX(0); }
+      body.nav-open .mobile-overlay { display:block; position:fixed; inset:0; z-index:25; background:rgba(10,17,30,.42); }
+      .workspace { width:100%; }
+      .mobile-brand { display:block; }
+      .breadcrumbs { display:none; }
+      .mobile-menu { display:grid; }
+      .hero-inner, .main, .topbar-inner { width:min(100% - 36px,1000px); }
+    }
+    @media (max-width: 700px) {
+      .hero { padding-top:38px; }
+      .hero-inner, .main, .topbar-inner { width:min(100% - 24px,1000px); }
+      h1 { font-size:40px; }
+      .stats { grid-template-columns:repeat(2,minmax(0,1fr)); row-gap:18px; }
+      .stat:nth-child(2) { border-right:0; }
+      .stat:nth-child(3) { padding-left:0; }
+      .controls { top:72px; padding-top:4px; }
+      .control-row { grid-template-columns:1fr auto; }
+      .control-row select { display:none; }
+      .mobile-category { display:block; grid-column:1/-1; }
+      .answer { padding:0 8px 24px; }
+      .answer-grid { grid-template-columns:1fr; }
+      .deep-block.measure { grid-column:auto; }
+      .question-head { padding-left:4px; padding-right:4px; grid-template-columns:32px 1fr auto; }
+      .result-meta span:last-child { display:none; }
+      .data-actions .spacer { display:none; }
+    }
+    @media (max-width: 480px) {
+      .stats { gap:0; }
+      .control-row { grid-template-columns:1fr; }
+      .mode-switch { grid-row:2; }
+      .mobile-category { grid-row:3; }
+      .question-head { grid-template-columns:28px 1fr auto; }
+      .q-number { grid-column:auto; }
+      .q-title-wrap { grid-column:auto; grid-row:auto; }
+      .chevron { grid-column:auto; grid-row:auto; }
+      .flash-card { min-height:560px; }
+    }
     @media print {
       body { background: #fff; color: #111; }
-      .topbar, .controls, .answer-actions, .footer, .flash-shell { display: none !important; }
+      .sidebar, .topbar, .controls, .answer-actions, .data-actions, .flash-shell { display: none !important; }
+      .app, .workspace { display:block; }
       .hero { padding: 24px 0; }
       .hero p, .identity, .q-meta, .answer { color: #333; }
       .question-card { break-inside: avoid; background: #fff; border-color: #ddd; }
@@ -185,92 +339,127 @@
 </head>
 <body>
   <div class="app">
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">
-          <div class="brand-mark">AI</div>
-          <div class="brand-copy">
-            <div class="brand-title">Architecture Interview OS</div>
-            <div class="brand-sub">Principal-level GenAI revision system</div>
-          </div>
-        </div>
-        <div class="top-actions">
-          <button class="btn" id="randomBtn" aria-label="Open a random question">↝ <span class="label">Random</span></button>
-          <button class="icon-btn" id="printBtn" aria-label="Print complete guide">⎙</button>
-        </div>
+    <aside class="sidebar" id="sidebar" aria-label="Study navigation">
+      <div class="side-brand">
+        <div class="side-monogram">AT</div>
+        <div><div class="side-name">Arpit Tiwari</div><div class="side-role">Senior AI Engineer · Turing</div></div>
       </div>
-    </header>
-
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="eyebrow">Enterprise GenAI · Senior to Principal</div>
-        <h1>Architect the system.<br>Defend every decision.</h1>
-        <p>A focused interview bank for RAG, fine-tuning, caching, evaluations, observability, feedback loops, guardrails, and production monitoring.</p>
-        <div class="identity">
-          <span><strong>Arpit Tiwari</strong> · Senior AI Engineer at Turing</span>
-          <a href="https://www.schoolofdataandai.com/" target="_blank" rel="noopener">School of Data &amp; AI ↗</a>
+      <div class="side-label">Architecture library</div>
+      <nav class="chips" id="chips" aria-label="Architecture dimensions"></nav>
+      <div class="side-bottom">
+        <div class="side-progress-line"><span>Mastery</span><strong id="sideProgress">0%</strong></div>
+        <div class="progress-shell" id="progressShell" role="progressbar" aria-label="Revision progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar" id="progressBar"></div></div>
+        <div class="side-links">
+          <a href="https://www.schoolofdataandai.com/" target="_blank" rel="noopener">SDAI ↗</a>
           <a href="https://www.linkedin.com/in/arpit-tiwari-4a5538190/" target="_blank" rel="noopener">LinkedIn ↗</a>
         </div>
-        <div class="stats">
-          <div class="stat"><div class="stat-value" id="totalStat">0</div><div class="stat-label">Architecture questions</div></div>
-          <div class="stat"><div class="stat-value">8</div><div class="stat-label">Core dimensions</div></div>
-          <div class="stat"><div class="stat-value" id="masteredStat">0</div><div class="stat-label">Mastered</div></div>
-          <div class="stat"><div class="stat-value" id="progressStat">0%</div><div class="stat-label">Revision progress</div></div>
-        </div>
-        <div class="progress-shell" aria-label="Revision progress"><div class="progress-bar" id="progressBar"></div></div>
       </div>
-    </section>
+    </aside>
+    <button class="mobile-overlay" id="mobileOverlay" aria-label="Close navigation"></button>
 
-    <main class="main">
-      <section class="controls" aria-label="Revision controls">
-        <div class="control-row">
-          <label class="search-wrap">
-            <span>⌕</span>
-            <input class="search" id="searchInput" type="search" placeholder="Search question, concept, metric, or technology…" autocomplete="off">
-            <kbd class="kbd">/</kbd>
-          </label>
-          <select id="statusFilter" aria-label="Filter by study status">
-            <option value="all">All questions</option>
-            <option value="bookmarked">Bookmarked</option>
-            <option value="mastered">Mastered</option>
-            <option value="unmastered">Not mastered</option>
-          </select>
-          <div class="mode-switch" aria-label="Study mode">
-            <button class="mode-btn active" data-mode="browse">Browse</button>
-            <button class="mode-btn" data-mode="flash">Flashcards</button>
+    <div class="workspace">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <button class="icon-btn mobile-menu" id="menuBtn" aria-label="Open navigation">☰</button>
+          <div class="mobile-brand">AI Architecture OS</div>
+          <div class="breadcrumbs"><span>Interview preparation</span><span>›</span><strong id="activeDimension">All dimensions</strong></div>
+          <div class="top-actions">
+            <button class="btn" id="randomBtn" aria-label="Open a random question">Random question</button>
+            <button class="btn" id="printBtn" aria-label="Print complete guide">Print</button>
           </div>
         </div>
-        <div class="chips" id="chips" aria-label="Architecture dimensions"></div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="eyebrow">Principal AI Architect · Interview preparation</div>
+          <h1>Design for the failure modes,<br>not the happy path.</h1>
+          <p>A production-focused question bank for enterprise RAG, agent orchestration, model adaptation, inference, distributed systems, safety, evaluation, and operations.</p>
+          <div class="identity">
+            <span>Prepared for <strong>Arpit Tiwari</strong></span>
+            <span>Senior AI Engineer at Turing</span>
+          </div>
+          <div class="stats">
+            <div class="stat"><div class="stat-value" id="totalStat">0</div><div class="stat-label">Interview questions</div></div>
+            <div class="stat"><div class="stat-value" id="dimensionStat">0</div><div class="stat-label">Architecture dimensions</div></div>
+            <div class="stat"><div class="stat-value" id="masteredStat">0</div><div class="stat-label">Mastered</div></div>
+            <div class="stat"><div class="stat-value" id="progressStat">0%</div><div class="stat-label">Overall progress</div></div>
+          </div>
+        </div>
       </section>
 
-      <div class="result-meta">
-        <span id="resultCount">0 questions</span>
-        <span>Shortcuts: <strong>/</strong> search · <strong>J/K</strong> navigate · <strong>Space</strong> reveal</span>
-      </div>
-      <section class="question-list" id="questionList"></section>
-      <div class="empty" id="emptyState">No questions match these filters. Try another term or dimension.</div>
-
-      <section class="flash-shell" aria-label="Flashcard study mode">
-        <article class="flash-card">
-          <div>
-            <div class="flash-top"><span id="flashCategory"></span><span id="flashCounter"></span></div>
-            <h2 class="flash-question" id="flashQuestion"></h2>
-            <div class="flash-answer" id="flashAnswer"></div>
+      <main class="main">
+        <section class="controls" aria-label="Revision controls">
+          <div class="control-row">
+            <label class="search-wrap">
+              <span>⌕</span>
+              <input class="search" id="searchInput" type="search" placeholder="Search concepts, tools, metrics, failure modes…" autocomplete="off">
+              <kbd class="kbd">/</kbd>
+            </label>
+            <select id="statusFilter" aria-label="Filter by study status">
+              <option value="all">All questions</option>
+              <option value="bookmarked">Bookmarked</option>
+              <option value="mastered">Mastered</option>
+              <option value="unmastered">Not mastered</option>
+            </select>
+            <div class="mode-switch" aria-label="Study mode">
+              <button class="mode-btn active" data-mode="browse">Read</button>
+              <button class="mode-btn" data-mode="flash">Recall</button>
+            </div>
+            <select class="mobile-category" id="mobileCategory" aria-label="Architecture dimension"></select>
           </div>
-          <div class="flash-actions">
-            <div><button class="btn" id="prevFlash">← Previous</button> <button class="btn" id="nextFlash">Next →</button></div>
-            <div><button class="btn primary" id="revealFlash">Reveal answer</button> <button class="btn master-btn" id="masterFlash">Mark mastered</button></div>
-          </div>
-        </article>
-      </section>
-    </main>
+        </section>
 
-    <footer class="footer">Built for deliberate practice · Your notes, bookmarks, and progress stay in this browser.</footer>
+        <div class="dimension-context" id="dimensionContext"></div>
+        <div class="result-meta">
+          <span id="resultCount">0 questions</span>
+          <span><strong>/</strong> search · <strong>J/K</strong> navigate · <strong>Space</strong> reveal</span>
+        </div>
+        <section class="question-list" id="questionList"></section>
+        <div class="empty" id="emptyState">No questions match these filters. Try another term or dimension.</div>
+
+        <section class="flash-shell" aria-label="Flashcard study mode">
+          <article class="flash-card">
+            <div>
+              <div class="flash-top"><span id="flashCategory"></span><span id="flashCounter"></span></div>
+              <h2 class="flash-question" id="flashQuestion"></h2>
+              <div class="flash-answer answer" id="flashAnswer"></div>
+            </div>
+            <div class="flash-actions">
+              <div><button class="btn" id="prevFlash">← Previous</button> <button class="btn" id="nextFlash">Next →</button></div>
+              <div><button class="btn primary" id="revealFlash">Reveal answer</button> <button class="btn master-btn" id="masterFlash">Mark mastered</button></div>
+            </div>
+          </article>
+        </section>
+
+        <section class="data-actions" aria-label="Progress data">
+          <span class="data-note">Progress and notes are stored only in your browser.</span>
+          <span class="spacer"></span>
+          <button class="btn" id="exportBtn">Export progress</button>
+          <label class="btn" for="importInput">Import progress</label>
+          <input class="file-input" id="importInput" type="file" accept="application/json,.json">
+          <button class="btn" id="resetBtn">Reset progress</button>
+        </section>
+      </main>
+    </div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </div>
 
   <script>
     const DATA = [
+      {
+        category: "AI & Agent Foundations",
+        challenges: "Establishing precise boundaries between models, assistants, workflows, agents, and agentic systems while assigning deterministic control to the right layer.",
+        items: [
+          { q: "Differentiate a chatbot, AI assistant, AI agent, agentic AI system, and multi-agent system.", tags:["Definitions","Agentic AI","AI agent"], a:`<p>A <strong>chatbot</strong> is a conversational interface; it may only generate text. An <strong>AI assistant</strong> helps a user complete tasks and may retrieve knowledge or call bounded tools, normally with the user retaining control. An <strong>AI agent</strong> is a runtime entity that observes state, selects actions, uses tools, updates state, and iterates toward a goal within defined permissions and budgets.</p><p><strong>Agentic AI</strong> describes the broader system property: goal-directed behavior, dynamic planning, tool use, memory, reflection or verification, and adaptation across multiple steps. It can be implemented by one agent plus deterministic workflow services. A <strong>multi-agent system</strong> uses multiple specialized agents with an explicit coordination protocol.</p><p>The terms are not maturity levels. A reliable deterministic assistant can be better than an autonomous agent. I choose the minimum agency needed for variability in the task because every additional decision increases latency, cost, nondeterminism, and security surface.</p>` },
+          { q: "What is the agent loop, and which parts should remain deterministic?", tags:["Agent loop","Control plane"], a:`<p>A typical loop is observe → update state → reason/plan → select action → validate → execute → observe result → decide whether to continue. The model is suitable for interpreting ambiguous intent, proposing plans, choosing among allowed tools, and synthesizing evidence.</p><p>Deterministic services should own identity, authorization, tool availability, schema validation, business rules, transition constraints, idempotency, budgets, approvals, persistence, and termination ceilings. Tool results are validated before entering authoritative state.</p><p>This division gives the model flexibility without treating generated tokens as trusted commands. In interviews I state the invariant explicitly: the model can propose an action, but only the runtime can authorize and commit it.</p>` },
+          { q: "How do you decide how much autonomy an AI system should receive?", tags:["Autonomy","Risk"], a:`<p>I score each action by reversibility, financial/legal impact, data sensitivity, confidence measurability, frequency, and human review cost. Read-only search can be highly automated; sending an email may require preview; deleting records or initiating payment requires deterministic prerequisites and approval.</p><p>I use an agency ladder: answer → recommend → prepare action → execute reversible action → execute sensitive action with approval. The system can move up the ladder only when evaluation evidence and operational controls support it.</p><p>Autonomy is granted per capability, not to the agent globally. Permissions remain least-privileged, time-bound, scoped to tenant/user, and revocable through tool-level kill switches.</p>` },
+          { q: "Compare ReAct, plan-and-execute, reflection, and deterministic workflow patterns.", tags:["ReAct","Planning","Reflection"], a:`<p><strong>ReAct</strong> interleaves reasoning and actions, adapting after every observation; it is flexible but can loop and create many model calls. <strong>Plan-and-execute</strong> creates a plan first and delegates steps; it improves visibility but plans become stale and require replanning. <strong>Reflection</strong> adds critique or verification, potentially improving quality at extra latency/cost and with correlated-model-error risk.</p><p>A deterministic workflow is preferable when transitions are known. Production systems often combine them: deterministic outer graph, model-planned bounded subtask, tool execution, then independent validation. I select patterns through trajectory success, calls per successful task, recovery rate, and tail latency—not benchmark novelty.</p>` },
+          { q: "When is a multi-agent design justified instead of one agent with tools?", tags:["Multi-agent","Trade-offs"], a:`<p>Multiple agents are justified when responsibilities require materially different context, tools, permissions, models, or parallel expertise—for example, an evidence researcher and a compliance reviewer. They can also isolate security domains.</p><p>I avoid them when the same goal can be represented as ordinary functions or nodes. Multi-agent systems introduce coordination failures, duplicated context, conflicting decisions, extra tokens, longer latency, and harder evaluation.</p><p>The architecture must define supervisor ownership, message contracts, shared versus private state, conflict resolution, termination, per-agent budgets, and what happens when one specialist fails. Measure whether specialization gives an evaluated lift over a simpler single-agent baseline.</p>` },
+          { q: "How would you explain an enterprise agent architecture end to end?", tags:["System design","Enterprise agents"], a:`<p>The request enters through gateway, authentication, authorization, rate limiting, and tenant context. An orchestrator loads durable workflow state and exposes a user/state-specific tool allowlist. The model interprets intent or proposes the next action. Deterministic routing validates the transition and tool arguments; sensitive actions create approval checkpoints.</p><p>Read tools retrieve authorized data; write tools use idempotency and postcondition verification. Results pass schema and semantic checks before state update. The model synthesizes a response from validated state and evidence; output guardrails enforce policy and DLP. Traces capture model, tools, state changes, policies, versions, latency, and cost.</p><p>Offline trajectory evaluations gate releases, production monitoring watches safety/reliability/quality, and feedback or incidents become regression cases. The workflow is bounded by tokens, calls, time, and cost.</p>` },
+          { q: "What are the most important failure modes of autonomous agents?", tags:["Failure modes","Safety"], a:`<p>Key failures include wrong goal interpretation, poor planning, incorrect tool selection/arguments, tool loops, premature completion, stale memory, prompt injection, privilege escalation, duplicated side effects, context pollution, correlated verifier errors, and unbounded cost.</p><p>Controls include typed state, allowlisted transitions/tools, input and result validation, authorization outside the model, progress/loop detection, idempotency, execution budgets, checkpointing, independent verification for high-risk claims, approval gates, and per-tool kill switches.</p><p>I test trajectories under injected tool failures, malformed results, unavailable dependencies, conflicting instructions, delayed approvals, and restarts—not only happy-path prompts.</p>` }
+        ]
+      },
       {
         category: "RAG",
         challenges: "Heterogeneous ingestion, chunking, retrieval quality, document freshness, citations, ACL enforcement, low latency, and prompt injection.",
@@ -286,7 +475,27 @@
           { q: "How do you assemble retrieved context for the LLM?", tags:["Context engineering","Citations"], a:`<p>Retrieval and context assembly are separate stages. Remove unauthorized and stale content, rerank, deduplicate, balance relevance with coverage and authority, expand child chunks when needed, and allocate tokens across subquestions.</p><p>Include source IDs and precise page/section locations; delimit sources and label them as untrusted data. Context ordering depends on the task: strongest evidence first, chronological for timelines, or grouped by source for comparison.</p><p>Define conflict rules such as preferring the currently effective approved policy. If authoritative sources disagree, expose the disagreement. Finally, validate claim-level citation entailment—not merely whether a cited document appeared in retrieval.</p>` },
           { q: "How do you quantify RAG accuracy?", tags:["Metrics","Evaluation"], a:`<p>I avoid one misleading accuracy number and report a scorecard.</p><ul><li><strong>Retrieval:</strong> recall@k, precision@k, MRR/nDCG, authorized retrieval, freshness, and duplicates.</li><li><strong>Generation:</strong> faithfulness, relevance, completeness, citation correctness/completeness, and correct abstention.</li><li><strong>End-to-end:</strong> task success, expert correctness, resolution rate, latency, cost, and safety violations.</li></ul><p>Results are segmented by intent, language, document class, user group, and risk. Example: 94% evidence recall@10, 91% citation correctness, and 87% end-to-end task success—not “94% chatbot accuracy.” LLM judges are calibrated against expert labels.</p>` },
           { q: "What is hybrid retrieval, and when would you use it?", tags:["BM25","Dense retrieval"], a:`<p>Hybrid retrieval combines lexical search with dense semantic search. Lexical search excels at exact names, codes, dates, numbers, and rare error strings. Dense retrieval handles paraphrase, conceptual similarity, and cross-lingual meaning.</p><p>Run both and combine ranks using reciprocal-rank fusion, calibrated normalized scores, a learned ranker, or query-dependent routing. Raw BM25 and cosine scores are not directly comparable. Identifier-heavy queries can favor lexical retrieval; conceptual questions can favor dense retrieval. Validate the choice against domain-specific recall and ranking metrics.</p>` },
-          { q: "How do you defend RAG against prompt injection in documents?", tags:["Security","Prompt injection"], a:`<p>Retrieved documents are untrusted input. They may provide evidence but cannot redefine system policy or authorize actions.</p><ul><li>Separate and clearly delimit instructions from retrieved data.</li><li>Detect suspicious instruction-like content during ingestion and retrieval.</li><li>Do authorization and tool permissions outside the model.</li><li>Never expose secrets in prompts or allow documents to expand tool access.</li><li>Separate retrieval from action authorization.</li><li>Apply output DLP and exfiltration controls.</li><li>Maintain indirect prompt-injection tests.</li></ul><blockquote>Evidence can inform a proposal; it cannot authorize a side effect.</blockquote>` }
+          { q: "How do you defend RAG against prompt injection in documents?", tags:["Security","Prompt injection"], a:`<p>Retrieved documents are untrusted input. They may provide evidence but cannot redefine system policy or authorize actions.</p><ul><li>Separate and clearly delimit instructions from retrieved data.</li><li>Detect suspicious instruction-like content during ingestion and retrieval.</li><li>Do authorization and tool permissions outside the model.</li><li>Never expose secrets in prompts or allow documents to expand tool access.</li><li>Separate retrieval from action authorization.</li><li>Apply output DLP and exfiltration controls.</li><li>Maintain indirect prompt-injection tests.</li></ul><blockquote>Evidence can inform a proposal; it cannot authorize a side effect.</blockquote>` },
+          { q: "Compare standard Vector RAG, GraphRAG, Self-RAG, Corrective RAG, Adaptive RAG, and Agentic RAG.", tags:["GraphRAG","Self-RAG","Agentic RAG"], a:`<p><strong>Vector RAG</strong> retrieves semantically similar chunks and is the default for localized knowledge lookup. <strong>GraphRAG</strong> retrieves entity relationships or community summaries for multi-hop and corpus-level questions. <strong>Self-RAG</strong> trains or prompts the model to decide when retrieval is needed and to critique relevance and support. <strong>Corrective RAG (CRAG)</strong> grades retrieved evidence and triggers query rewriting or an alternate source when quality is poor.</p><p><strong>Adaptive RAG</strong> classifies query complexity and dynamically chooses no retrieval, single retrieval, iterative retrieval, or a stronger path. <strong>Agentic RAG</strong> uses a planning loop to select sources/tools, decompose questions, retrieve iteratively, inspect gaps, and stop when evidence is sufficient.</p><p>These patterns are composable, not mutually exclusive. I start with simple hybrid RAG and add complexity only when a labeled failure class proves the need. Compare task success, evidence recall, unsupported claims, model/tool calls, latency, and cost per successful answer.</p>` },
+          { q: "What is Self-RAG, and how would you implement its ideas without training a new model?", tags:["Self-RAG","Reflection","Grounding"], a:`<p>Self-RAG introduces decisions and critique around retrieval: should I retrieve, is this passage relevant, is the answer supported, and is it useful? The original approach can learn special reflection behavior, but the architecture can be approximated with explicit workflow nodes.</p><ol><li>Classify whether the request needs external evidence.</li><li>Retrieve and rerank candidates.</li><li>Grade each passage for relevance and authority.</li><li>Generate a draft with claim-level citations.</li><li>Run a support checker against the cited spans.</li><li>If evidence is missing, rewrite/decompose and retrieve again within a budget; otherwise answer or abstain.</li></ol><p>I keep the grader independent where risk warrants it and validate it against human labels. Reflection adds calls and can reproduce the generator’s error, so it is not a guarantee. Hard limits and explicit insufficient-evidence states prevent endless self-correction.</p>` },
+          { q: "What makes Agentic RAG different from a normal RAG pipeline?", tags:["Agentic RAG","Planning","Tools"], a:`<p>Normal RAG follows a mostly fixed path: transform query, retrieve, rerank, assemble, generate. Agentic RAG lets a bounded planner choose among heterogeneous sources and iteratively adapt based on observations—for example, search policies, query SQL, inspect a knowledge graph, compare versions, then retrieve supporting passages.</p><p>The state tracks the original goal, subquestions, evidence ledger, source provenance, unresolved gaps, calls, and budget. Each source is a typed tool with authorization and result validation. A deterministic controller restricts transitions and stops when evidence coverage meets a predicate or the budget is exhausted.</p><p>Agentic RAG is useful for multi-hop, investigative, or mixed structured/unstructured questions. It is unnecessary for predictable FAQs and increases cost, latency, injection exposure, and trajectory complexity. Evaluate source/tool selection, evidence coverage, answer support, stopping correctness, and cost per completed task.</p>` },
+          { q: "How does Corrective RAG respond when retrieval quality is poor?", tags:["CRAG","Fallback","Retrieval grading"], a:`<p>Corrective RAG introduces a retrieval-quality gate. After candidate generation, a grader classifies evidence as sufficient, ambiguous, or irrelevant. Sufficient evidence proceeds to generation; ambiguous evidence may be decomposed or expanded; irrelevant evidence triggers query rewriting, a different retriever, authoritative web/enterprise search, or abstention.</p><p>The grader should use query–passage relevance, authority, freshness, ACL validity, and coverage—not vector score alone. Fallback sources remain governed and cited. I cap correction attempts and record why each branch fired.</p><p>The main risks are an overconfident grader, latency multiplication, and allowing an unsafe fallback source. I evaluate route accuracy and end-to-end lift against a simpler hybrid baseline.</p>` },
+          { q: "What is Maximum Marginal Relevance (MMR), and how do you tune it?", tags:["MMR","Diversity","Retrieval"], a:`<p>MMR selects passages by balancing relevance to the query against redundancy with already selected passages:</p><pre><code>MMR(d) = λ · relevance(query, d)
+         − (1 − λ) · max similarity(d, selected)</code></pre><p>A higher λ favors the most relevant candidates; a lower λ increases diversity. It helps when top semantic results are near-duplicate chunks from one section and the answer needs broader evidence.</p><p>I first retrieve a larger candidate pool, enforce ACLs, then apply MMR or another diversification method before context assembly. Tune λ, candidate count, and final k on coverage, redundancy, faithfulness, and downstream answer quality. MMR can hurt narrow fact lookup by replacing a highly relevant passage with diverse but less useful content, so routing it by query type may outperform global use.</p>` },
+          { q: "How and when should you perform query decomposition?", tags:["Query decomposition","Multi-hop","Planning"], a:`<p>Decompose when one request contains independent facets, comparisons, temporal stages, or multi-hop dependencies. For “Compare the revenue and risk disclosures of companies A and B,” create source-scoped subqueries and later synthesize. Do not decompose a simple lookup because it adds calls and can change intent.</p><p>The decomposer returns structured subquestions with dependencies and a synthesis plan. Independent branches can run concurrently; dependent branches wait for prior entities or evidence. Every subanswer retains citations, and the join step checks coverage and conflicts.</p><pre><code class="language-python">class SubQuery(BaseModel):
+    id: str
+    question: str
+    depends_on: list[str] = []
+    required_source: str | None = None
+
+# Validate acyclic dependencies, authorize each source,
+# then execute independent subqueries with bounded concurrency.</code></pre><p>Evaluate decomposition correctness, evidence recall, synthesis consistency, latency, and whether the original user intent survived.</p>` },
+          { q: "Compare query rewriting, multi-query retrieval, and HyDE.", tags:["Query transformation","HyDE","Multi-query"], a:`<p><strong>Rewriting</strong> converts a conversational or vague request into one standalone retrieval query, preserving constraints and entities. <strong>Multi-query</strong> generates several alternative perspectives to improve recall, retrieves for each, and fuses/deduplicates results. <strong>HyDE</strong> generates a hypothetical answer/document and embeds it, helping when user queries and document language differ.</p><p>All can drift from intent. Preserve the original query, lock critical entities/negation/time constraints, and include the original retrieval branch. Use reciprocal-rank fusion rather than comparing raw scores across branches. HyDE-generated text is a retrieval aid, never evidence.</p><p>Route transformations to hard queries based on measured lift because additional retrieval branches increase latency and cost.</p>` },
+          { q: "How do HNSW, IVF, Flat search, and product quantization affect vector retrieval?", tags:["Vector index","HNSW","IVF-PQ"], a:`<p><strong>Flat/exact search</strong> maximizes recall but scans all vectors and becomes expensive at scale. <strong>HNSW</strong> builds a navigable proximity graph with strong recall/latency but substantial memory and slower updates/builds. <strong>IVF</strong> partitions vectors into coarse clusters and searches selected lists; tuning list count and probes trades recall for speed. <strong>Product quantization</strong> compresses vectors to reduce memory and accelerate distance calculations with some accuracy loss.</p><p>Choose using corpus size, dimensions, update/delete rate, filter selectivity, memory, latency SLO, and required recall. Benchmark with real filters because ACL/metadata filtering can change ANN behavior. Track recall against an exact-search subset and retune parameters after data distribution or embedding changes.</p>` },
+          { q: "What is pre-filtering versus post-filtering in vector databases?", tags:["Metadata filters","ACL","Vector DB"], a:`<p><strong>Pre-filtering</strong> restricts the searchable population before or during ANN traversal. It protects authorization and avoids wasting candidates, but highly selective filters can degrade graph navigation or require specialized indexes. <strong>Post-filtering</strong> retrieves broadly and removes invalid results afterward; it is simple but may return too few authorized items.</p><p>For ACLs, authorization must be guaranteed regardless of retrieval method. Common designs include tenant partitions, filter-aware ANN, security group metadata, controlled over-fetching, or candidate IDs followed by a policy decision point. Never compensate for empty authorized results by relaxing the filter.</p><p>Measure authorized recall and tail latency at realistic filter selectivities, not only unfiltered ANN benchmarks.</p>` },
+          { q: "What are contextual compression, parent-document retrieval, and RAPTOR-style hierarchical retrieval?", tags:["Hierarchical RAG","Compression","RAPTOR"], a:`<p><strong>Contextual compression</strong> extracts or summarizes only query-relevant portions from retrieved documents, reducing tokens but risking omission or distortion. <strong>Parent-document retrieval</strong> indexes small child chunks for precise matching and returns a larger parent for coherent generation. <strong>Hierarchical/RAPTOR-style retrieval</strong> creates a tree of clusters and summaries, enabling search at detailed and abstract levels.</p><p>Use parent retrieval when local matches need surrounding clauses; hierarchical retrieval when questions operate at multiple abstraction levels or require corpus synthesis. Preserve links from summaries to original evidence and cite originals, not generated summaries alone.</p><p>Evaluate evidence recall, abstraction-level routing, summary faithfulness, token reduction, and ingestion cost.</p>` },
+          { q: "How would you build an evidence ledger for multi-step RAG?", tags:["Evidence ledger","Provenance","Agentic RAG"], a:`<p>An evidence ledger is structured workflow state for every claim-bearing item: source/document/version, span or row, retrieval query, authorization decision, relevance score, authority, freshness, extracted claim, supporting/contradicting status, and which subquestion it addresses.</p><p>Agent steps add evidence through validated interfaces rather than concatenating text into a transcript. The synthesis node selects from the ledger, detects unresolved gaps or conflicts, and generates citations. A claim-support validator maps answer claims back to ledger entries.</p><p>This improves deduplication, auditability, context budgeting, and resume/replay. The ledger stores references and compact representations; large raw payloads remain in controlled storage.</p>` },
+          { q: "When should a RAG system abstain instead of answering?", tags:["Abstention","Confidence","Safety"], a:`<p>Abstain when required evidence is absent, unauthorized, stale beyond policy, contradictory without a resolution rule, below a validated relevance threshold, or from an unapproved source. Also abstain when the request is outside scope or asks for an action the system cannot safely perform.</p><p>I do not use model confidence alone. The decision combines retrieval coverage, reranker/entailment evidence, citation completeness, source authority, and query risk. Responses should say what is missing and offer a safe next step, such as clarifying the date or escalating to an expert.</p><p>Evaluate both unsupported-answer rate and over-refusal. The threshold is risk-dependent: a casual FAQ tolerates different uncertainty than clinical or legal guidance.</p>` }
         ]
       },
       {
@@ -381,6 +590,72 @@
           { q: "How do you monitor RAG quality without production ground truth?", tags:["RAG","Online quality"], a:`<p>Triangulate proxies: zero results, low reranker confidence, duplicates, source anomalies, citation coverage, unsupported-claim detection, reformulation, citation clicks, and escalation. Run asynchronous relevance/grounding evaluation on samples and route risky or low-confidence cases to experts.</p><p>Maintain known-answer canary queries and continuously convert verified production failures into labeled evaluation cases. No single proxy proves correctness.</p>` },
           { q: "What is your AI incident-response process?", tags:["Incident response","Operations"], a:`<ol><li>Detect and classify severity: leakage, harmful output, unauthorized action, quality regression, outage, latency, or cost.</li><li>Contain with feature/tool kill switches, rollback, traffic reduction, or safe degraded mode.</li><li>Preserve traces and identify affected users, tenants, and versions.</li><li>Restore service and remediate external side effects.</li><li>Complete root-cause analysis, add regression/adversarial tests, improve controls, and communicate as required.</li></ol><p>Maintain per-tool kill switches so irreversible actions can stop without disabling safe read-only service.</p>` }
         ]
+      },
+      {
+        category: "Agentic Systems",
+        challenges: "Deterministic orchestration around probabilistic decisions, typed state, durable execution, parallel tools, memory, termination, and framework boundaries.",
+        items: [
+          { q: "Compare LangChain-style chains with LangGraph stateful workflows.", tags:["LangChain","LangGraph","State machines"], a:`<p><strong>LangChain</strong> is a broad component and composition ecosystem: models, retrievers, tools, parsers, and LCEL runnables. It can express sequences, branches, and DAG-like composition. <strong>LangGraph</strong> is an orchestration runtime centered on nodes, edges, typed shared state, cycles, checkpoints, interrupts, and durable execution.</p><p>I use a simple chain when the path is bounded and linear—retrieve, prompt, parse. I use a graph when execution can loop, branch based on state, call multiple specialists, pause for approval, resume after failure, or run for a long time.</p><p>The trade-off is operational complexity. A graph makes control flow explicit, but state schemas, reducers, checkpoint storage, migrations, termination, and replay must be engineered. Framework selection follows workflow semantics; “agentic” is not a reason to use a graph by itself.</p><blockquote>Use the lowest-complexity orchestration model that preserves the required control and recovery semantics.</blockquote>` },
+          { q: "Show how you would represent typed LangGraph state and safe routing.", tags:["LangGraph","Typed state","Python"], a:`<p>State is an explicit contract rather than an unstructured transcript. Nodes read a projection and return controlled updates; conditional edges select only registered destinations.</p><pre><code class="language-python">from typing import Literal, TypedDict
+from langgraph.graph import StateGraph, START, END
+
+class AgentState(TypedDict):
+    request_id: str
+    intent: str
+    evidence: list[str]
+    tool_attempts: int
+    status: Literal["new", "ready", "blocked", "done"]
+
+def route(state: AgentState) -> Literal["retrieve", "approve", "answer"]:
+    if state["status"] == "blocked":
+        return "approve"
+    return "answer" if state["evidence"] else "retrieve"
+
+graph = StateGraph(AgentState)
+# add_node(...), add_conditional_edges(...), compile(checkpointer=...)</code></pre><p>I validate node outputs, restrict valid transitions, make reducers explicit for concurrently updated fields, and version the state schema. The LLM may recommend a route, but code maps it into an allowlisted transition.</p>` },
+          { q: "Walk through the complete production tool-calling loop.", tags:["Tool calling","Contracts"], a:`<ol><li>Define a narrow tool description plus JSON Schema/Pydantic input and typed result contract.</li><li>Expose only tools allowed for this user, tenant, and workflow state.</li><li>The model returns a structured tool request; the runtime validates schema, permission, preconditions, and budget.</li><li>Execute with deadlines, rate limits, idempotency, and classified retries.</li><li>Validate transport, schema, semantics, authorization, and postconditions.</li><li>Write the validated result into workflow state and provide the model only the necessary projection.</li><li>Trace the decision, call, result, state transition, and final utilization.</li></ol><p>Model decision-making and deterministic execution are separate trust boundaries. Side effects may require human approval.</p>` },
+          { q: "When should tools run concurrently, and how do you implement it safely?", tags:["Async","Parallel tools","Latency"], a:`<p>Run tools concurrently only when they are independent: for example, policy search and customer-profile lookup. If B depends on A’s output, or both mutate shared state, preserve ordering.</p><pre><code class="language-python">async def gather_context(query, customer_id):
+    async with asyncio.TaskGroup() as tg:
+        policy_task = tg.create_task(search_policy(query))
+        profile_task = tg.create_task(get_profile(customer_id))
+    return policy_task.result(), profile_task.result()</code></pre><p>Bound concurrency with semaphores, assign per-call and overall deadlines, propagate cancellation, isolate failures, and define whether partial success is useful. Merge results deterministically and preserve trace parentage. Unbounded <code>gather</code> can exhaust sockets, provider quotas, memory, or downstream databases.</p>` },
+          { q: "How do you design a supervisor and specialized sub-agents?", tags:["Supervisor","Multi-agent"], a:`<p>The supervisor owns routing and completion; specialists have narrow tools and typed interfaces. I define each agent’s responsibility, input projection, output schema, permissions, maximum budget, and failure contract.</p><p>Routing can be deterministic for known intents, model-driven among an allowlist for ambiguous work, or hybrid. The supervisor validates outputs and decides whether evidence is sufficient, another specialist is needed, or execution must stop.</p><p>I avoid agents when ordinary functions or one workflow suffice. Multiple agents are justified only by meaningful specialization, isolated context/tool permissions, or parallel problem decomposition—not as an architectural aesthetic.</p>` },
+          { q: "How do checkpointing and durable execution work in LangGraph-like systems?", tags:["Checkpointing","Durability","HITL"], a:`<p>After meaningful transitions, persist the thread/run ID, state snapshot, next node, workflow/state-schema versions, tool transaction references, and approval metadata. The checkpoint write and external side effect must have clear consistency semantics.</p><p>On resume, reload state, verify identity and permissions, migrate old state if required, revalidate stale prerequisites, and continue from a known boundary. Side effects use idempotency keys so replay does not duplicate them. Checkpoint stores need encryption, tenant isolation, retention, concurrency control, and optimistic versioning.</p><p>Durability is more than serializing a chat history; it is the ability to resume safely after process loss.</p>` },
+          { q: "How do you manage concurrent state updates and reducers in a graph?", tags:["Reducers","Concurrency","State"], a:`<p>Parallel branches must not mutate shared dictionaries implicitly. Each node returns an update, and field-specific reducers define merge semantics: append messages, union evidence IDs, take the maximum retry count, or reject concurrent writes to a singleton decision.</p><p>I include a state version and use optimistic concurrency at the checkpoint store. Non-commutative updates are serialized or reconciled in a dedicated join node. The merge must be deterministic and tested under reordered completion because async branches finish nondeterministically.</p>` },
+          { q: "How do you architect short-term, long-term, semantic, and episodic agent memory?", tags:["Memory","Context engineering"], a:`<p>Short-term execution state belongs to the active run. Long-term profile/preferences need explicit consent and structured storage. Semantic memory stores retrievable facts with provenance; episodic memory stores summarized prior interactions. Business truth remains in systems of record.</p><p>A governed memory write pipeline validates usefulness, confidence, sensitivity, ownership, expiry, and conflicts. Retrieval applies tenant/user ACLs, time decay, relevance, and source trust. Memories can be corrected, superseded, or deleted. I do not let a model indiscriminately write its own generations into permanent memory because errors compound.</p>` },
+          { q: "Where does Model Context Protocol fit, and what are its security boundaries?", tags:["MCP","Integration","Security"], a:`<p>MCP standardizes how clients discover and invoke external tools, resources, and prompts. It reduces bespoke adapters, but it does not make a server or returned content trustworthy.</p><p>Enterprise controls still include server allowlisting, transport authentication, per-tool authorization, schema validation, egress rules, secret isolation, rate limits, user confirmation for side effects, result sanitization, and auditable provenance. Treat server descriptions and tool output as untrusted input. Pin or approve server versions and protect against capability changes after connection.</p>` },
+          { q: "How do you decide that an agent is finished—and prove it will terminate?", tags:["Termination","Budgets","Correctness"], a:`<p>Define business completion predicates, required evidence, and terminal states. The model may declare completion, but the runtime checks the predicate. Add maximum iterations/calls/tokens/cost/time plus progress detection for unchanged state, repeated tool arguments, cycling routes, and repeated evidence.</p><p>Test liveness and safety properties: every permitted path reaches a terminal or escalation state within budget, while forbidden actions remain unreachable. In high-risk workflows, the state machine—not conversational intuition—is the source of termination truth.</p>` }
+        ]
+      },
+      {
+        category: "LLM Serving",
+        challenges: "Throughput, TTFT, token latency, KV-cache efficiency, batching, GPU memory, autoscaling, routing, quotas, and managed-versus-self-hosted economics.",
+        items: [
+          { q: "How do you optimize LLM inference for high throughput and low latency?", tags:["Inference","vLLM","Economics"], a:`<p>Start with workload shape: prompt/output lengths, arrival distribution, concurrency, latency SLO, model size, and hardware. Engines such as vLLM or TensorRT-LLM improve utilization through continuous batching and optimized attention/KV-cache management.</p><ul><li><strong>Continuous batching:</strong> admit new sequences as others finish rather than waiting for a static batch.</li><li><strong>Paged KV cache:</strong> allocate cache in blocks to reduce fragmentation and increase effective batch size.</li><li><strong>Prefix caching:</strong> reuse KV blocks for identical shared prompt prefixes.</li><li><strong>Speculative decoding:</strong> let a draft model propose tokens that the target model verifies.</li><li><strong>Quantization and parallelism:</strong> trade memory/quality/communication for capacity.</li></ul><p>Measure TTFT, inter-token latency, total latency, tokens/second, queue time, goodput under SLO, GPU utilization, and cost per accepted output—not raw throughput alone.</p>` },
+          { q: "Explain the KV cache and why it dominates serving architecture.", tags:["KV cache","Memory"], a:`<p>Autoregressive decoding would repeatedly recompute attention keys and values for all previous tokens. The KV cache stores them per layer and sequence, reducing repeated compute but consuming memory proportional to layers, heads, precision, batch/concurrency, and sequence length.</p><p>Long contexts can therefore reduce concurrency even when model weights fit. Paged allocation reduces fragmentation; quantized KV caches trade some fidelity for capacity; prefix caching helps repeated prefixes. Capacity planning must model KV memory at P95/P99 context—not only weight size.</p>` },
+          { q: "How do continuous batching and request scheduling affect fairness?", tags:["Batching","Scheduling"], a:`<p>Continuous batching increases GPU utilization, but very long generations can delay short interactive requests. I classify traffic by latency tier, cap output lengths, use admission control, and consider separate pools or weighted fair scheduling for batch and interactive workloads.</p><p>Monitor queue time independently from inference time. Autoscaling reacts to queued/pending tokens, active sequences, and SLO headroom rather than CPU utilization alone. Per-tenant quotas prevent one customer from monopolizing the batch.</p>` },
+          { q: "When does speculative decoding help, and what are the trade-offs?", tags:["Speculative decoding","Latency"], a:`<p>A smaller draft model proposes several tokens; the target verifies them in fewer sequential passes. It helps when draft acceptance is high and decoding is memory-bandwidth or sequential-step constrained.</p><p>Benefits fall when the draft disagrees frequently, outputs are short, prompts dominate latency, or extra compute is scarce. The draft and target tokenization/probability behavior must be compatible. Benchmark end-to-end accepted tokens per target pass, latency percentiles, throughput, and cost on the real domain.</p>` },
+          { q: "How would you design an enterprise model gateway and routing policy?", tags:["Model gateway","Routing"], a:`<p>The gateway centralizes provider/model abstraction, authentication, approved deployments, quotas, timeouts, retries, circuit breakers, content-policy hooks, tracing, token accounting, and version pinning. Routing considers task complexity, modality, context length, residency, latency tier, cost, availability, and evaluated quality.</p><p>A cheap classifier or deterministic rule handles obvious routes; uncertain/high-risk requests use the stronger model. Fallbacks are capability-aware—never send regulated data to an unapproved region or substitute a model that cannot satisfy structured output. Route changes pass the same regression gates as prompt changes.</p>` },
+          { q: "How do you autoscale self-hosted inference?", tags:["GPU","Autoscaling","Capacity"], a:`<p>Scale on queued tokens, active sequences, KV-cache pressure, predicted service time, and latency SLO—not request count alone. Keep warm capacity because GPU provisioning and model loading are slow. Use model replicas, admission control, max context/output limits, and separate pools for incompatible latency classes.</p><p>Scale-down must drain sequences safely. Load testing covers burst arrivals, long-tail prompts, streaming clients, and model-loading failure. Track goodput: throughput that still satisfies the latency objective.</p>` },
+          { q: "How do quantization and tensor/pipeline parallelism change the design?", tags:["Quantization","Parallelism"], a:`<p>Weight quantization reduces memory and can improve throughput, but quality and kernel support vary by model/task/hardware. Validate critical slices rather than assuming an 8-bit or 4-bit checkpoint is equivalent.</p><p>Tensor parallelism splits operations across GPUs and requires fast interconnects; pipeline parallelism splits layers and introduces pipeline bubbles; data parallelism replicates the model for throughput. The best configuration depends on model size, node topology, batch shape, latency, and fault domain. More GPUs can increase communication overhead and cost without improving interactive latency.</p>` },
+          { q: "How do streaming, cancellation, and backpressure work end to end?", tags:["Streaming","Cancellation","Backpressure"], a:`<p>Use SSE or WebSocket streaming through proxies configured not to buffer. Propagate client disconnect and cancellation through the gateway to inference and tool tasks so abandoned work stops consuming quota. Bound per-connection buffers and apply backpressure to slow consumers.</p><p>Do not declare success when streaming begins; record final completion, cancellation, safety termination, and token usage. If output guardrails require full-text inspection, choose buffered generation or incremental policies and explain the latency/safety trade-off.</p>` },
+          { q: "When should you use managed model APIs versus self-hosting?", tags:["Build vs buy","TCO"], a:`<p>Managed APIs minimize operations and offer elastic capacity, model improvements, and strong baseline reliability. Self-hosting may provide data control, model customization, predictable high-volume economics, hardware-specific optimization, or offline deployment.</p><p>Compare total cost—including GPUs, idle headroom, engineers, upgrades, observability, security, and on-call—not token price alone. Also compare residency, contractual guarantees, quotas, latency, model access, and exit strategy. A hybrid gateway can use managed models for frontier reasoning and self-hosted smaller models for stable high-volume tasks.</p>` }
+        ]
+      },
+      {
+        category: "Data & Async Pipelines",
+        challenges: "Large-scale ingestion, bounded concurrency, backpressure, idempotency, data contracts, multimodal extraction, graph enrichment, consistency, and reprocessing.",
+        items: [
+          { q: "Design an asynchronous ingestion system for tens of millions of documents.", tags:["Async","Queues","Large data"], a:`<p>Use a control-plane document registry and event-driven stages: discover → validate/scan → parse/OCR → normalize → chunk → enrich → embed → index → verify → activate. Each stage consumes a durable queue, writes idempotently, emits status/events, and scales independently.</p><p>Store large payloads in object storage; queue messages carry IDs and versions, not document bytes. Partition fairly by tenant/source, impose per-stage concurrency and rate limits, use dead-letter queues, and maintain replay/reconciliation tooling. A document version becomes searchable only after required indexes and ACL metadata pass verification.</p>` },
+          { q: "What does exactly-once processing mean in an AI data pipeline?", tags:["Idempotency","Delivery semantics"], a:`<p>Most queues provide at-least-once delivery, so consumers must tolerate duplicates. True end-to-end exactly-once behavior across storage, embeddings, and external indexes is rarely available.</p><p>I design <strong>effectively-once outcomes</strong> using stable operation keys such as tenant/document/version/stage/configuration, idempotent upserts, uniqueness constraints, transactional outbox patterns, and checkpointed status. Acknowledgment occurs only after durable effects. Reconciliation detects partial or orphaned writes.</p>` },
+          { q: "When should Python use async I/O, threads, processes, or distributed workers?", tags:["Python","Async","Concurrency"], a:`<ul><li><strong>asyncio:</strong> many network-bound calls with async-compatible clients.</li><li><strong>Threads:</strong> blocking I/O libraries or native code that releases the GIL.</li><li><strong>Processes:</strong> CPU-bound Python parsing, local inference, or isolation.</li><li><strong>Distributed workers:</strong> durable, horizontally scaled, retryable tasks beyond one process/machine.</li></ul><p>Async does not make CPU work faster and blocking calls inside the event loop stall all requests. Bound every concurrency mechanism, propagate deadlines/cancellation, and measure downstream saturation.</p>` },
+          { q: "How do you implement bounded concurrency and backpressure?", tags:["Backpressure","Semaphores","Reliability"], a:`<p>Set concurrency per downstream dependency using semaphores or worker-pool capacity. Queue depth absorbs bursts; admission control and tenant quotas stop unlimited growth. Batch compatible embedding work by token count, not only document count.</p><p>When a dependency slows, workers reduce intake rather than spawning unlimited tasks. Monitor queue age, not just length, because a stable long queue may still violate freshness. Define overload behavior: defer low-priority work, spill to durable storage, or reject explicitly.</p>` },
+          { q: "How do you process very large files without exhausting memory?", tags:["Streaming","Memory","Large files"], a:`<p>Stream bytes and pages rather than loading the entire file. Persist intermediate page/section artifacts, process in bounded batches, and use content-addressed storage to reuse results. Apply parser limits for pages, images, decompression ratio, and malformed objects.</p><p>Track document → page → block → chunk lineage so a failed page can retry independently and citations map back exactly. For global document summaries, build hierarchical summaries after local extraction rather than concatenating all chunks into one call.</p>` },
+          { q: "How do you maintain consistency between object storage, metadata, vector, and lexical indexes?", tags:["Consistency","Indexing"], a:`<p>Use the document registry as control-plane truth. Every artifact carries document/version/configuration identifiers. Stages transition through pending, processing, verified, active, failed, and deleted states.</p><p>Write new versions alongside old ones, verify expected counts/checksums and ACL metadata, then atomically switch the active version or alias. Tombstones drive deletions. Scheduled reconciliation compares all stores and repairs missing/orphaned records. During partial failure, queries continue using the previous complete version.</p>` },
+          { q: "How do you ingest visually complex PDFs with tables, charts, and diagrams?", tags:["Multimodal","OCR","VLM"], a:`<p>Start with layout detection and OCR while preserving reading order, coordinates, page numbers, headings, and table structure. Route cropped charts, diagrams, or difficult pages to a vision-language model or specialized document model; store the raw crop, extracted structure, semantic description, and provenance together.</p><p>Index text/table representations for lexical and dense retrieval and optionally image embeddings for cross-modal retrieval. At generation time, provide the original visual to a multimodal model when fine-grained verification matters. Validate numeric table extraction separately—fluent VLM descriptions are not guaranteed exact.</p>` },
+          { q: "When should you use GraphRAG alongside vector RAG?", tags:["GraphRAG","Knowledge graph","Multi-hop"], a:`<p>Vector RAG excels at localized semantic lookup. Graph retrieval helps explicit multi-hop relationships, entity-centric questions, dependency paths, and global corpus themes.</p><p>During ingestion, resolve entities, extract typed relationships with provenance/confidence, construct the graph, and optionally generate community summaries. At query time, classify the request and use vector retrieval, graph traversal, community summaries, or a hybrid.</p><p>Graph extraction and entity resolution are expensive and error-prone; stale relationships require lifecycle management. Use it only when graph evaluation shows lift over simpler decomposition plus vector/lexical retrieval.</p>` },
+          { q: "How do you version parsers, chunkers, prompts, and enrichment logic for safe reprocessing?", tags:["Data lineage","Reprocessing"], a:`<p>Every derived artifact records source checksum plus parser, OCR, chunker, enrichment prompt/model, embedding, and index-schema versions. A dependency manifest determines which stages are invalidated by a configuration change.</p><p>Reprocess into a shadow version, validate counts, quality, cost, and retrieval outcomes, then activate atomically. Prior versions support rollback. Budget and schedule reprocessing by tenant priority, and avoid a fleet-wide cache/index stampede after upgrades.</p>` }
+        ]
       }
     ];
 
@@ -391,10 +666,101 @@
       { category:"Cross-Dimensional", q:"Give your Principal-level philosophy for production AI architecture.", tags:["Executive answer","Principles"], a:`<p>I design enterprise AI as a governed distributed system containing a probabilistic component. The LLM handles language, flexible reasoning, and generation; deterministic services handle authorization, workflow, schemas, business rules, persistence, and irreversible actions.</p><p>I separately evaluate retrieval, output, tools, workflow decisions, safety, latency, and cost. Every behavioral artifact is versioned; executions are traceable and bounded; releases use regression gates and controlled rollout. Feedback and incidents become validated evaluations before they drive improvement.</p><blockquote>The objective is not an impressive answer. It is an authorized, grounded, measurable, reliable, and operable outcome.</blockquote>` }
     ];
 
+    const PLAYBOOKS = {
+      "AI & Agent Foundations": {
+        design:"Begin with the business goal and risk of each action. Draw a hard boundary between probabilistic proposals and deterministic authorization, execution, persistence, and termination. Prefer the least autonomous design that handles real workflow variability; version prompts, state schema, tools, policies, and models together.",
+        failure:"Challenge the design with ambiguous goals, poisoned context, unavailable tools, malformed results, repeated actions, stale approvals, process restarts, privilege escalation, and conflicting agents. Require bounded execution and a safe terminal or escalation path for every branch.",
+        measure:"Report task and trajectory success, correct action selection, argument validity, loop/termination rate, human override, unauthorized-action rate, latency, and cost per successful task.",
+        follow:["Where exactly is the trust boundary between the model and runtime?","What simpler non-agentic baseline would you compare against?"]
+      },
+      "RAG": {
+        design:"Separate ingestion, candidate generation, authorization, reranking, context assembly, generation, and claim verification. Version documents, parsers, chunkers, embeddings, indexes, prompts, and ACL policy. Select retrieval and context strategies by query class instead of forcing one global pipeline.",
+        failure:"Test missing evidence, distractors, duplicates, stale versions, conflicting sources, exact identifiers, multilingual queries, selective ACL filters, empty results, indirect prompt injection, and partial index updates. Never let low retrieval confidence silently become a confident answer.",
+        measure:"Measure retrieval recall/nDCG and authorized recall separately from answer faithfulness, completeness, citation correctness, abstention, latency, and cost. Slice by query type, language, source, tenant, and risk.",
+        follow:["How would you prove whether the failure is retrieval or generation?","What would make you accept the additional latency of this technique?"]
+      },
+      "Fine-Tuning": {
+        design:"Start with a baseline and error taxonomy; prove prompting, retrieval, schemas, or deterministic code cannot solve the failure more safely. Govern training lineage, split by entity/time to prevent leakage, and version the base model, tokenizer, data, checkpoint, prompt, and safety policy as one release unit.",
+        failure:"Probe memorization, overfitting, catastrophic forgetting, unsafe refusal changes, class imbalance, demographic/language slices, distribution shift, data deletion, provider upgrades, and serving incompatibility. Retain the production baseline and rollback artifact.",
+        measure:"Compare task lift against prompt-only and RAG baselines, plus schema validity, safety, robustness, calibration, latency, throughput, and total cost. Require statistical and slice-level release gates.",
+        follow:["Why is fine-tuning preferable to RAG for this failure?","How would you remove one user’s data after training?"]
+      },
+      "Caching": {
+        design:"Define the consistency and security contract for every cache layer. Include tenant/auth scope, corpus, prompt, model, policy, and relevant state in keys; use version namespaces and event-driven invalidation. Keep the source of truth outside the cache.",
+        failure:"Test stale ACLs, cross-tenant collisions, semantic near-miss reuse, stampedes, cache outage, poisoned entries, hot keys, eviction pressure, and nested retries. Side effects use idempotency rather than response caching.",
+        measure:"Track hit rate together with cache precision, stale-hit/security violations, saved tokens and latency, eviction, memory, lookup tail latency, and downstream amplification during misses.",
+        follow:["What exact event invalidates this entry?","Which behavior-changing field is most likely missing from your cache key?"]
+      },
+      "Evals": {
+        design:"Build a versioned dataset from production, experts, incidents, adversarial cases, and critical long-tail scenarios. Evaluate components, trajectories, outputs, and system outcomes separately; combine deterministic assertions, calibrated judges, and human review.",
+        failure:"Guard against train/test leakage, synthetic-data dominance, judge bias, aggregate metrics hiding critical slices, flaky generations, changing traffic mix, and optimizing proxies that do not represent user success.",
+        measure:"Use paired comparisons, repeated runs where needed, confidence intervals, slice thresholds, and hard security invariants. Connect quality to latency and cost per successful task, then validate offline lift with shadow/canary evidence.",
+        follow:["What is the unit of evaluation and the ground truth?","What regression would block release even if the aggregate score improves?"]
+      },
+      "Observability": {
+        design:"Propagate one trace across gateway, workflow, models, retrieval, tools, queues, guardrails, and caches. Record behavioral versions, state transitions, policy decisions, retries, token/cost data, and privacy-safe payload references so executions can be replayed.",
+        failure:"Plan for missing spans, sampling gaps, uncorrelated async jobs, sensitive-data leakage in logs, high-cardinality cost, clock skew, provider opacity, and traces that record transport success but omit semantic validation.",
+        measure:"Track trace completeness, sampling coverage, redaction effectiveness, ingestion delay, cardinality/cost, replay success, and mean time to isolate a reported production failure.",
+        follow:["Could you reproduce this exact failure from the trace?","Which fields are safe to log, and who can access raw payloads?"]
+      },
+      "User Feedback Loops": {
+        design:"Link explicit and implicit feedback to the exact trace, sources, tools, and versions. Triage by failure type and severity, validate with experts, convert confirmed failures into evaluations, then choose the correct product, data, retrieval, prompt, tool, guardrail, or tuning intervention.",
+        failure:"Account for selection bias, malicious corrections, PII, duplicate reports, popularity-versus-correctness bias, traffic-mix changes, and feedback dashboards with no remediation owner. Never train directly on raw feedback.",
+        measure:"Track response rate, reason codes, resolution, reformulation, escalation, action reversal, time to remediation, recurrence, and experimental impact by cohort and difficulty.",
+        follow:["How do you know this feedback represents correctness rather than style preference?","How does one production complaint become a regression test?"]
+      },
+      "Guardrails": {
+        design:"Apply defense in depth across identity, input, retrieval, model, tools, workflow, output, and audit. Policies and permissions are deterministic, fail closed, versioned, and evaluated; models can classify or propose but never grant authority.",
+        failure:"Test prompt injection, encoded exfiltration, PII variations, confused-deputy attacks, tool argument smuggling, stale approval, policy-service outage, false positives, false negatives, and bypass through alternate modalities or tools.",
+        measure:"Report violation recall/precision by risk class, unauthorized action and leakage rate, approval compliance, blocked-safe-request rate, added latency, override rate, and adversarial-suite pass rate.",
+        follow:["Which guardrail is deterministic and which is model-based?","Does the system fail open or fail closed when the policy dependency is unavailable?"]
+      },
+      "Monitoring": {
+        design:"Define service, behavioral, safety, and economic SLIs with owners, thresholds, runbooks, and release annotations. Segment by tenant, region, model, prompt, workflow, tool, language, and intent so aggregates do not conceal localized failures.",
+        failure:"Exercise quota exhaustion, dependency slowdown, retry storms, queue growth, model drift, provider changes, cache collapse, cost runaway, cross-region failover, and alert fatigue. Provide model- and tool-specific kill switches.",
+        measure:"Monitor availability, queue age, TTFT and tail latency, errors/retries, trajectory quality, grounding/citations, policy violations, tokens, cache behavior, and cost per successful task against explicit SLOs.",
+        follow:["What alert fires first, and what is the operator’s immediate action?","Which quality signal can be monitored before human ground truth arrives?"]
+      },
+      "Agentic Systems": {
+        design:"Represent the workflow as typed state and allowlisted transitions. Give each node or agent the minimum context, tools, permissions, and budget. Use durable checkpoints, idempotent side effects, explicit joins/reducers, and human interrupts for consequential actions.",
+        failure:"Test loops, state races, non-commutative parallel updates, duplicated tool effects, stale checkpoints, interrupted approvals, schema migrations, specialist disagreement, memory poisoning, and supervisor misrouting.",
+        measure:"Evaluate full trajectories: route/tool choice, arguments, order, state invariants, recovery, termination, calls, latency, human intervention, and task success. Compare against a deterministic or single-agent baseline.",
+        follow:["Why does this need LangGraph instead of a normal function or queue?","How will the workflow resume safely after a crash immediately following a side effect?"]
+      },
+      "LLM Serving": {
+        design:"Model workload by prompt/output tokens, arrival rate, concurrency, latency tier, model size, KV memory, and provider/hardware constraints. Design admission, scheduling, batching, routing, streaming, cancellation, quotas, and warm capacity around goodput under SLO.",
+        failure:"Load-test long contexts, burst traffic, slow clients, OOM, fragmented KV cache, cold starts, replica loss, provider throttling, fallback incompatibility, cancellation leaks, and one tenant monopolizing batches.",
+        measure:"Track queue time, TTFT, inter-token and total latency, tokens/second, accepted requests under SLO, KV utilization, batch occupancy, GPU utilization, cancellation waste, and cost per completed generation.",
+        follow:["Is the bottleneck queueing, prefill, decode, memory, or network?","How would this design change for long-context batch traffic versus interactive chat?"]
+      },
+      "Data & Async Pipelines": {
+        design:"Move large payloads through object storage and IDs through durable queues. Make every stage independently scalable, bounded, idempotent, versioned, observable, and replayable. Use the registry as control-plane truth and atomically activate only verified complete versions.",
+        failure:"Inject duplicate/out-of-order events, poison documents, parser hangs, partial writes, rate limits, queue backlog, worker death, schema evolution, deletion races, tenant hotspots, and reprocessing storms. Reconciliation repairs divergence.",
+        measure:"Track queue age/lag, stage throughput and latency, retry/DLQ rate, document freshness, completeness/checksums, per-tenant fairness, memory, reprocessing cost, and source-to-index reconciliation errors.",
+        follow:["What makes processing idempotent across a crash?","Where is backpressure applied when the embedding provider slows down?"]
+      },
+      "Cross-Dimensional": {
+        design:"State requirements and non-negotiable safety constraints first, then draw data/control planes, trust boundaries, state, dependencies, and lifecycle. Explain the chosen design, the simpler baseline, and the condition that would make you change it.",
+        failure:"Walk the interviewer through dependency failure, stale data, security bypass, model regression, overload, duplicated side effects, and rollback. Make ownership and safe degradation explicit.",
+        measure:"Tie technical metrics to task success, safety, latency SLO, total cost, user impact, and release decisions. Avoid a single ‘accuracy’ number.",
+        follow:["What is your first bottleneck or failure domain at ten times the traffic?","Which architectural decision is hardest to reverse?"]
+      }
+    };
+
     const QUESTIONS = [];
     DATA.forEach(section => section.items.forEach(item => QUESTIONS.push({...item, category: section.category, challenges: section.challenges})));
     CROSS.forEach(item => QUESTIONS.push({...item, challenges:"Connect quality, security, reliability, economics, and operations in one architectural decision."}));
-    QUESTIONS.forEach((q, i) => q.id = `q-${i+1}`);
+    function stableId(value) {
+      let hash = 2166136261;
+      for (let i=0; i<value.length; i++) { hash ^= value.charCodeAt(i); hash = Math.imul(hash, 16777619); }
+      return `q-${(hash >>> 0).toString(36)}`;
+    }
+    QUESTIONS.forEach(q => q.id = stableId(`${q.category}|${q.q}`));
+    const legacyMap = {};
+    QUESTIONS.filter(q => !["AI & Agent Foundations","Agentic Systems","LLM Serving","Data & Async Pipelines","Cross-Dimensional"].includes(q.category))
+      .forEach((q,i) => legacyMap[`q-${i+1}`] = q.id);
+    QUESTIONS.filter(q => q.category === "Cross-Dimensional")
+      .forEach((q,i) => legacyMap[`q-${i+64}`] = q.id);
 
     const STORE_KEY = "arpit-ai-architecture-os-v1";
     let saved;
@@ -404,9 +770,9 @@
       query: "",
       status: "all",
       mode: "browse",
-      mastered: new Set(saved.mastered || []),
-      bookmarked: new Set(saved.bookmarked || []),
-      notes: saved.notes || {},
+      mastered: new Set((saved.mastered || []).map(id => legacyMap[id] || id)),
+      bookmarked: new Set((saved.bookmarked || []).map(id => legacyMap[id] || id)),
+      notes: Object.fromEntries(Object.entries(saved.notes || {}).map(([id,value]) => [legacyMap[id] || id,value])),
       flashIndex: 0
     };
 
@@ -415,7 +781,10 @@
       search: document.getElementById("searchInput"), status: document.getElementById("statusFilter"),
       count: document.getElementById("resultCount"), empty: document.getElementById("emptyState"),
       total: document.getElementById("totalStat"), mastered: document.getElementById("masteredStat"),
-      progress: document.getElementById("progressStat"), bar: document.getElementById("progressBar"),
+      progress: document.getElementById("progressStat"), bar: document.getElementById("progressBar"), progressShell: document.getElementById("progressShell"),
+      sideProgress: document.getElementById("sideProgress"), dimensionStat: document.getElementById("dimensionStat"),
+      activeDimension: document.getElementById("activeDimension"), dimensionContext: document.getElementById("dimensionContext"),
+      mobileCategory: document.getElementById("mobileCategory"),
       flashCategory: document.getElementById("flashCategory"), flashCounter: document.getElementById("flashCounter"),
       flashQuestion: document.getElementById("flashQuestion"), flashAnswer: document.getElementById("flashAnswer"),
       reveal: document.getElementById("revealFlash"), masterFlash: document.getElementById("masterFlash"),
@@ -431,7 +800,10 @@
       els.total.textContent = QUESTIONS.length;
       els.mastered.textContent = state.mastered.size;
       els.progress.textContent = `${percent}%`;
+      els.sideProgress.textContent = `${percent}%`;
+      els.dimensionStat.textContent = DATA.length;
       els.bar.style.width = `${percent}%`;
+      els.progressShell.setAttribute("aria-valuenow", percent);
     }
     function filteredQuestions() {
       const query = state.query.trim().toLowerCase();
@@ -441,7 +813,8 @@
         if (state.status === "unmastered" && state.mastered.has(item.id)) return false;
         if (state.status === "bookmarked" && !state.bookmarked.has(item.id)) return false;
         if (!query) return true;
-        const plain = `${item.q} ${item.category} ${item.tags.join(" ")} ${item.a.replace(/<[^>]+>/g," ")}`.toLowerCase();
+        const playbook = PLAYBOOKS[item.category] || PLAYBOOKS["Cross-Dimensional"];
+        const plain = `${item.q} ${item.category} ${item.tags.join(" ")} ${item.a.replace(/<[^>]+>/g," ")} ${playbook.design} ${playbook.failure} ${playbook.measure}`.toLowerCase();
         return plain.includes(query);
       });
     }
@@ -451,11 +824,38 @@
       if (!q || q.length < 2) return text;
       return text.replace(new RegExp(`(${escapeRx(q)})`, "ig"), "<mark>$1</mark>");
     }
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[ch]);
+    }
+    function fullAnswer(item) {
+      const playbook = PLAYBOOKS[item.category] || PLAYBOOKS["Cross-Dimensional"];
+      return `<span class="answer-label">Perfect interview answer</span>${item.a}
+        <section class="principal-expansion">
+          <h4>Principal-level expansion</h4>
+          <div class="answer-grid">
+            <div class="deep-block"><h4>Architecture decisions</h4><p>${playbook.design}</p></div>
+            <div class="deep-block"><h4>Failure modes to challenge</h4><p>${playbook.failure}</p></div>
+            <div class="deep-block measure"><h4>Evidence and metrics</h4><p>${playbook.measure}</p></div>
+            <div class="deep-block measure"><h4>Production decision</h4><p>Anchor the answer in a concrete workload and baseline, state the accepted trade-off, version every affected artifact, and add the relevant failure to automated regression. Release behind a feature flag through shadow or canary traffic, with an explicit rollback trigger, safe fallback behavior, and owning team before increasing exposure.</p></div>
+          </div>
+          <h4>Likely interviewer follow-ups</h4>
+          <ol class="followup-list">${playbook.follow.map(question => `<li>${question}</li>`).join("")}</ol>
+        </section>`;
+    }
     function renderChips() {
       const cats = ["All", ...DATA.map(x => x.category), "Cross-Dimensional"];
-      els.chips.innerHTML = cats.map(cat => `<button class="chip ${state.category===cat?"active":""}" data-category="${cat}">${cat}</button>`).join("");
+      els.chips.innerHTML = cats.map((cat,index) => {
+        const count = cat === "All" ? QUESTIONS.length : QUESTIONS.filter(q => q.category === cat).length;
+        return `<button class="chip ${state.category===cat?"active":""}" data-category="${cat}"><span class="chip-index">${String(index+1).padStart(2,"0")}</span><span>${cat}</span><span class="chip-count">${count}</span></button>`;
+      }).join("");
+      els.mobileCategory.innerHTML = cats.map(cat => `<option value="${cat}" ${state.category===cat?"selected":""}>${cat}</option>`).join("");
+      els.activeDimension.textContent = state.category === "All" ? "All dimensions" : state.category;
+      const section = DATA.find(x => x.category === state.category);
+      const challenge = section?.challenges || (state.category === "Cross-Dimensional" ? "Connect quality, security, reliability, economics, and operations in one architectural decision." : "");
+      els.dimensionContext.innerHTML = challenge ? `<strong>Critical architecture challenge:</strong> ${challenge}` : "";
+      els.dimensionContext.classList.toggle("show", Boolean(challenge));
       els.chips.querySelectorAll(".chip").forEach(btn => btn.addEventListener("click", () => {
-        state.category = btn.dataset.category; state.flashIndex = 0; renderChips(); render();
+        state.category = btn.dataset.category; state.flashIndex = 0; document.body.classList.remove("nav-open"); renderChips(); render();
       }));
     }
     function render() {
@@ -471,17 +871,18 @@
             <span class="q-title-wrap"><span class="q-title">${highlight(item.q)}</span><span class="q-meta"><span class="tag">${item.category}</span>${item.tags.map(t=>`<span>${t}</span>`).join(" · ")}</span></span>
             <span class="chevron">⌄</span>
           </button>
-          <div class="answer"><div class="answer-inner">${highlight(item.a)}
+          <div class="answer"><div class="answer-inner">${fullAnswer(item)}
             <div class="answer-actions">
               <button class="bookmark-btn bookmark ${bookmarked?"active":""}">${bookmarked?"★ Bookmarked":"☆ Bookmark"}</button>
               <button class="bookmark-btn master-btn ${mastered?"active":""}">${mastered?"✓ Mastered":"Mark mastered"}</button>
               <button class="bookmark-btn copy-btn">Copy answer</button>
             </div>
-            <textarea class="note" placeholder="Add your personal example, metric, or project story…" aria-label="Personal notes">${state.notes[item.id] || ""}</textarea>
+            <textarea class="note" placeholder="Add your personal example, metric, or project story…" aria-label="Personal notes">${escapeHtml(state.notes[item.id] || "")}</textarea>
           </div></div>
         </article>`;
       }).join("");
       wireCards();
+      highlightCode(els.list);
       if (state.mode === "flash") renderFlash();
     }
     function wireCards() {
@@ -490,11 +891,30 @@
         head.addEventListener("click", () => { const open = card.classList.toggle("open"); head.setAttribute("aria-expanded", open); });
         card.querySelector(".bookmark").addEventListener("click", () => { state.bookmarked.has(id)?state.bookmarked.delete(id):state.bookmarked.add(id); persist(); render(); });
         card.querySelector(".master-btn").addEventListener("click", () => { state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id); persist(); render(); toast(state.mastered.has(id)?"Marked as mastered":"Moved back to revision"); });
-        card.querySelector(".copy-btn").addEventListener("click", async () => { await navigator.clipboard.writeText(`${item.q}\n\n${strip(item.a)}`); toast("Answer copied"); });
+        card.querySelector(".copy-btn").addEventListener("click", async () => { await copyText(`${item.q}\n\n${strip(fullAnswer(item))}`); toast("Answer copied"); });
         card.querySelector(".note").addEventListener("input", e => { state.notes[id] = e.target.value; clearTimeout(window.noteTimer); window.noteTimer=setTimeout(persist,300); });
       });
     }
     function strip(html) { const d=document.createElement("div"); d.innerHTML=html; return d.innerText; }
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); }
+      catch { const area=document.createElement("textarea"); area.value=text; area.style.position="fixed"; area.style.opacity="0"; document.body.appendChild(area); area.select(); document.execCommand("copy"); area.remove(); }
+    }
+    function highlightCode(root=document) {
+      root.querySelectorAll("pre code:not([data-highlighted])").forEach(code => {
+        const source = code.textContent;
+        const token = /#[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|\b(?:from|import|class|def|return|if|else|elif|async|await|with|as|for|in|try|except|raise|True|False|None)\b/g;
+        let html = "", last = 0, match;
+        while ((match = token.exec(source))) {
+          html += escapeHtml(source.slice(last, match.index));
+          const value = match[0];
+          const kind = value.startsWith("#") ? "code-comment" : (value.startsWith('"') || value.startsWith("'")) ? "code-string" : "code-keyword";
+          html += `<span class="${kind}">${escapeHtml(value)}</span>`;
+          last = match.index + value.length;
+        }
+        code.innerHTML = html + escapeHtml(source.slice(last)); code.dataset.highlighted = "true";
+      });
+    }
     function setMode(mode) {
       state.mode = mode; document.body.classList.toggle("flash-mode", mode === "flash");
       document.querySelectorAll(".mode-btn").forEach(btn => btn.classList.toggle("active", btn.dataset.mode===mode));
@@ -508,7 +928,8 @@
       els.flashCategory.textContent = `${item.category} · ${item.tags.join(" · ")}`;
       els.flashCounter.textContent = `${state.flashIndex+1} / ${items.length}`;
       els.flashQuestion.textContent = item.q;
-      els.flashAnswer.innerHTML = item.a;
+      els.flashAnswer.innerHTML = fullAnswer(item);
+      highlightCode(els.flashAnswer);
       els.flashAnswer.classList.remove("show");
       els.reveal.textContent = "Reveal answer";
       const done=state.mastered.has(item.id); els.masterFlash.textContent=done?"✓ Mastered":"Mark mastered"; els.masterFlash.classList.toggle("active",done);
@@ -519,6 +940,7 @@
 
     els.search.addEventListener("input", e => { state.query=e.target.value; state.flashIndex=0; render(); });
     els.status.addEventListener("change", e => { state.status=e.target.value; state.flashIndex=0; render(); });
+    els.mobileCategory.addEventListener("change", e => { state.category=e.target.value; state.flashIndex=0; renderChips(); render(); });
     document.querySelectorAll(".mode-btn").forEach(btn => btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
     document.getElementById("prevFlash").addEventListener("click",()=>moveFlash(-1));
     document.getElementById("nextFlash").addEventListener("click",()=>moveFlash(1));
@@ -526,6 +948,31 @@
     els.masterFlash.addEventListener("click",()=>{ const items=filteredQuestions(); if(!items.length)return; const id=items[state.flashIndex].id; state.mastered.has(id)?state.mastered.delete(id):state.mastered.add(id); persist(); renderFlash(); });
     document.getElementById("randomBtn").addEventListener("click",()=>{ const items=filteredQuestions(); if(!items.length)return; setMode("flash"); state.flashIndex=Math.floor(Math.random()*items.length); renderFlash(); });
     document.getElementById("printBtn").addEventListener("click",()=>window.print());
+    document.getElementById("menuBtn").addEventListener("click",()=>document.body.classList.add("nav-open"));
+    document.getElementById("mobileOverlay").addEventListener("click",()=>document.body.classList.remove("nav-open"));
+    document.getElementById("exportBtn").addEventListener("click",()=>{
+      const payload = {schema:"ai-architecture-os-progress",version:2,exportedAt:new Date().toISOString(),mastered:[...state.mastered],bookmarked:[...state.bookmarked],notes:state.notes};
+      const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+      const url = URL.createObjectURL(blob), link=document.createElement("a");
+      link.href=url; link.download=`arpit-ai-architecture-progress-${new Date().toISOString().slice(0,10)}.json`; link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),0); toast("Progress exported");
+    });
+    document.getElementById("importInput").addEventListener("change",async e=>{
+      const file=e.target.files?.[0]; if(!file)return;
+      try {
+        const incoming=JSON.parse(await file.text());
+        if(incoming.schema!=="ai-architecture-os-progress" || !Array.isArray(incoming.mastered) || !Array.isArray(incoming.bookmarked) || typeof incoming.notes!=="object") throw new Error("Invalid progress file");
+        state.mastered=new Set(incoming.mastered.filter(id=>QUESTIONS.some(q=>q.id===id)));
+        state.bookmarked=new Set(incoming.bookmarked.filter(id=>QUESTIONS.some(q=>q.id===id)));
+        state.notes=Object.fromEntries(Object.entries(incoming.notes).filter(([id,value])=>QUESTIONS.some(q=>q.id===id) && typeof value==="string"));
+        persist(); render(); toast("Progress imported");
+      } catch { toast("That progress file is not valid"); }
+      e.target.value="";
+    });
+    document.getElementById("resetBtn").addEventListener("click",()=>{
+      if(!confirm("Reset all mastered questions, bookmarks, and personal notes? Export first if you may need them.")) return;
+      state.mastered.clear(); state.bookmarked.clear(); state.notes={}; persist(); render(); toast("Progress reset");
+    });
     document.addEventListener("keydown", e => {
       if (e.key==="/" && document.activeElement!==els.search) { e.preventDefault(); els.search.focus(); }
       if (state.mode==="flash" && !["INPUT","TEXTAREA","SELECT"].includes(document.activeElement.tagName)) {
