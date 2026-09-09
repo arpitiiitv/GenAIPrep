@@ -747,6 +747,129 @@ graph = StateGraph(AgentState)
       }
     };
 
+    const FOLLOWUP_RULES = [
+      [/chatbot, AI assistant|Differentiate a chatbot/i,["Can a deterministic workflow still be considered agentic, and where would you draw the boundary?","Give one business example where an assistant is safer and more effective than an autonomous agent."]],
+      [/agent loop/i,["Which loop steps may use an LLM, and which must be enforced in code?","How would you detect that the loop is active but no longer making meaningful progress?"]],
+      [/how much autonomy/i,["How would you quantify reversibility and business impact before granting an action permission?","What evidence would allow you to move a capability from ‘recommend’ to ‘execute’?"]],
+      [/ReAct, plan-and-execute/i,["When does ReAct outperform plan-and-execute, and how would you demonstrate it experimentally?","How do you prevent a reflection step from confidently approving the generator’s original mistake?"]],
+      [/multi-agent design justified/i,["Which context or permission boundary makes separate agents necessary in your example?","How would you resolve two specialist agents returning contradictory recommendations?"]],
+      [/enterprise agent architecture end to end/i,["Where would you persist workflow state, and how would you migrate its schema?","What happens if the process crashes after the external action succeeds but before checkpointing?"]],
+      [/failure modes of autonomous agents/i,["Which failure cannot be detected from the final answer alone?","How would you build an adversarial trajectory test for privilege escalation?"]],
+      [/transformers at the depth/i,["Why can a model accept a long context yet still fail to use relevant evidence?","How do KV-cache growth and attention behavior affect your production architecture?"]],
+      [/bi-encoders and cross-encoders/i,["At what candidate count does cross-encoder reranking violate your latency SLO?","How would you evaluate whether the reranker adds lift beyond the bi-encoder ranking?"]],
+      [/entire PDF|one-million-token/i,["For which document tasks would you deliberately choose long-context processing over RAG?","How would you compare long-context and RAG quality without letting cost or latency bias the evaluation?"]],
+      [/10 million confidential PDFs/i,["How would ACL selectivity affect ANN recall and index partitioning?","Describe the zero-downtime migration path when the embedding model changes across 10 million PDFs."]],
+      [/chunking strategy/i,["How would you choose chunk size for tables versus narrative policy text?","When does parent-document retrieval outperform overlap-based chunking?"]],
+      [/embedding model/i,["How would you migrate embedding spaces without downtime or mixed-vector errors?","Which evaluation slices reveal weaknesses hidden by public embedding benchmarks?"]],
+      [/added, modified, deleted/i,["How do you guarantee that a deleted document cannot survive in one secondary index or cache?","What remains queryable when lexical indexing succeeds but vector indexing fails?"]],
+      [/query reaches the retrieval/i,["When should the system ask a clarifying question instead of generating multiple retrieval queries?","How do you preserve negation, identifiers, and date constraints during query rewriting?"]],
+      [/assemble retrieved context/i,["How would you order conflicting sources with different authority and effective dates?","What method would you use to measure whether extra context is helping or distracting the generator?"]],
+      [/quantify RAG accuracy/i,["Why is one end-to-end accuracy number insufficient for diagnosing RAG?","How would you set release gates when retrieval recall improves but faithfulness declines?"]],
+      [/hybrid retrieval/i,["How do you combine BM25 and dense scores that are not naturally comparable?","When would query-dependent fusion weights outperform one global weighting?"]],
+      [/prompt injection in documents/i,["How would you test an indirect injection that asks the model to exfiltrate tool output?","Why can an injection detector never replace deterministic authorization?"]],
+      [/Compare standard Vector RAG/i,["Which observed failure class would justify moving beyond hybrid vector RAG?","Can Self-RAG and Agentic RAG be combined, and what new failure modes would that create?"]],
+      [/What is Self-RAG/i,["How would you calibrate retrieval and support graders against expert labels?","What prevents repeated critique and retrieval from becoming an expensive infinite loop?"]],
+      [/Agentic RAG different/i,["What state belongs in the evidence ledger rather than the conversation transcript?","When is Agentic RAG unjustified despite producing a better demo?"]],
+      [/Corrective RAG/i,["What confidence threshold routes to rewrite, alternate retrieval, or abstention?","How do you keep a fallback source from weakening the original trust and ACL boundary?"]],
+      [/Maximum Marginal Relevance/i,["How would you tune lambda for narrow fact lookup versus comparative synthesis?","Can MMR reduce answer quality even when retrieved-document diversity increases?"]],
+      [/query decomposition/i,["How do you validate that generated subquestions preserve the original intent?","How would you execute dependent and independent subqueries without creating a latency explosion?"]],
+      [/query rewriting, multi-query/i,["Why must the original query remain one retrieval branch?","How would you detect entity or negation drift in a HyDE-generated hypothetical document?"]],
+      [/HNSW, IVF/i,["How do HNSW search parameters affect recall, latency, and memory?","Which index would you choose for a frequently updated corpus with highly selective metadata filters?"]],
+      [/pre-filtering versus post-filtering/i,["Why can post-filtering return zero authorized results even when relevant authorized documents exist?","How would you benchmark filter-aware ANN under realistic ACL selectivity?"]],
+      [/contextual compression/i,["How do you verify that compression did not remove a qualifying exception or negation?","Why should a hierarchical summary usually cite original evidence rather than itself?"]],
+      [/evidence ledger/i,["How would you represent contradictory evidence and unresolved coverage gaps?","What prevents the ledger from growing into another unbounded context window?"]],
+      [/RAG system abstain/i,["How would you tune abstention separately for legal guidance and a general FAQ?","Which observable signals distinguish justified abstention from an over-sensitive system?"]],
+      [/prompting, RAG, or fine-tuning/i,["Give an example where fine-tuning appears attractive but creates an unacceptable deletion problem.","What baseline evidence must exist before you approve a fine-tuning project?"]],
+      [/fine-tuning data pipeline/i,["How would you split the dataset to prevent near-duplicate entity leakage?","Which training-data lineage fields are required for audit and deletion requests?"]],
+      [/full fine-tuning, LoRA/i,["When can adapter switching reduce batching efficiency in production?","How would you determine whether LoRA lacks sufficient adaptation capacity?"]],
+      [/evaluate a fine-tuned/i,["Which general-capability regression would block a domain-task improvement?","How would you separate gain from tuning versus a changed inference prompt?"]],
+      [/overfitting and catastrophic/i,["What production behavior suggests memorization even when validation loss looks healthy?","How would you design an unseen-entity test for the tuned behavior?"]],
+      [/privacy, retention, and deletion/i,["Why is deleting a training row insufficient to remove its effect from weights?","When would data-deletion requirements force you to choose RAG instead?"]],
+      [/version and deploy fine-tuned/i,["Which artifacts must be rolled back together with a tuned checkpoint?","How do you canary a model whose failures are qualitative rather than HTTP errors?"]],
+      [/What can be cached/i,["Which cache layer offers the safest cost reduction in your architecture?","What consistency contract would you document for a cached retrieval result?"]],
+      [/safe RAG response cache key/i,["How would you represent authorization scope without placing raw PII in the key?","Which version changes should invalidate a cached answer even if the query is identical?"]],
+      [/semantic caching/i,["How do you prevent ‘Can I cancel?’ and ‘Cancel my order’ from sharing a result?","Which domain would you explicitly exclude from semantic caching and why?"]],
+      [/invalidate caches/i,["How would an ACL revocation reach every cache before the next request?","When is a versioned namespace preferable to enumerating dependent cache entries?"]],
+      [/cache stampede/i,["Compare single-flight, stale-while-revalidate, and refresh-ahead for one hot key.","How does a cache outage amplify downstream model traffic, and where do you shed load?"]],
+      [/tool calls be cached/i,["Why is an idempotency key not the same as caching the tool response?","How would you recover when a payment succeeded but its HTTP response was lost?"]],
+      [/evaluation architecture/i,["Which failures require component evaluation even when end-to-end task success is high?","How do evaluation results become enforceable CI/CD release gates?"]],
+      [/representative evaluation dataset/i,["How would you overweight rare security incidents without distorting everyday-quality metrics?","What split strategy prevents the same document or customer from leaking across train and test?"]],
+      [/evaluate tool use/i,["How do you score a trajectory that reaches the right answer using an unsafe tool sequence?","Which mocked failure distinguishes a retry bug from a tool-selection bug?"]],
+      [/evaluate RAG without hiding/i,["How would generation-on-fixed-context isolate model behavior from retrieval behavior?","What result proves the reranker helped end-to-end rather than only improving nDCG?"]],
+      [/LLM-as-a-judge/i,["How would you measure and correct verbosity or position bias in the judge?","When must a domain expert override judge-model agreement?"]],
+      [/release gates/i,["Which metric is a hard gate rather than a weighted quality trade-off?","What production signal would automatically roll the candidate back?"]],
+      [/nondeterministic behavior/i,["How many repeated runs are justified for a safety-critical case?","Why can an average score hide a dangerous worst-case generation?"]],
+      [/genuinely better/i,["How would you prove non-inferiority when quality is stable but cost falls?","Why is cost per successful task more meaningful than cost per request for agents?"]],
+      [/execution trace capture/i,["Which payload fields would you redact while retaining enough information to reproduce the failure?","How do you correlate an asynchronous tool job back to the initiating model decision?"]],
+      [/debug a wrong multi-step/i,["What is the first divergence you compare between successful and failing traces?","How do you replay the workflow without repeating real-world side effects?"]],
+      [/workflow state and model context/i,["Which state fields should never be exposed to a particular model node?","How do you version and migrate persisted state for workflows waiting on approval?"]],
+      [/persist information beyond/i,["How do you distinguish a remembered user claim from authoritative business truth?","What consent, expiry, and correction controls apply to long-term semantic memory?"]],
+      [/safely log prompts/i,["How would you debug a content failure when raw prompt logging is prohibited?","What retention and access policy applies to restricted trace payloads?"]],
+      [/observe tool correctness/i,["Why does HTTP 200 reveal almost nothing about agent correctness?","Which metric detects a tool result that was valid but ignored by the final response?"]],
+      [/attribute and control AI cost/i,["Which workflow step has the highest marginal cost without quality lift?","How would you enforce tenant budgets without unfairly rejecting long but legitimate requests?"]],
+      [/user-feedback system/i,["Which implicit signal best detects a plausible but unhelpful answer?","How do you link a user correction to the exact evidence and workflow version?"]],
+      [/turn feedback into/i,["Who validates a reported domain error before it becomes a golden test?","How do you determine whether the fix belongs in data, retrieval, prompting, tooling, or UX?"]],
+      [/fine-tune directly on user/i,["What makes preference feedback unsafe as an unreviewed training label?","How do you prevent feedback examples from contaminating the evaluation set?"]],
+      [/feedback metrics from misleading/i,["How would you correct for the fact that dissatisfied users rate more often?","Can thumbs-up improve while factual correctness declines, and how would you detect it?"]],
+      [/close the user-feedback loop/i,["What is the operational SLA for correcting a consequential wrong answer?","How do you verify that the same failure stopped recurring after release?"]],
+      [/governance guardrails/i,["Which controls must fail closed when their dependency is unavailable?","How would you prove that defenses cover input, retrieval, tools, and output rather than only prompts?"]],
+      [/PII masking end to end/i,["How would you preserve entity consistency across chunks while preventing unauthorized re-identification?","Which PII classes need different confidence thresholds and why?"]],
+      [/Microsoft Presidio/i,["How would you add and validate a custom recognizer for an internal employee identifier?","What happens to entity offsets when long documents are chunked and later rehydrated?"]],
+      [/enforce tool-call order/i,["How does the runtime prevent payment before identity verification even if the model requests it?","What state and audit evidence are required to reject an invalid transition?"]],
+      [/infinite agent|tool loops/i,["Which progress signal detects an A→B→A cycle with different natural-language reasoning?","What safe response is returned after the execution budget is exhausted?"]],
+      [/HTTP 200 with an unusable/i,["Which semantic checks turn a transport success into a domain failure?","When would you independently verify the tool’s postcondition?"]],
+      [/output safe for downstream/i,["What business invariant can pass JSON Schema while still being unsafe?","How do you bound structured-output repair without creating another retry loop?"]],
+      [/pause for human approval/i,["What must be revalidated if approval arrives hours after the proposal?","How do idempotency and checkpoint versions protect resume after an application restart?"]],
+      [/secure a multi-agent/i,["Can one agent indirectly grant another broader access through its message?","How do you test cross-agent prompt injection and secret propagation?"]],
+      [/monitoring, observability, and evaluation/i,["Give one production incident where monitoring detects, observability diagnoses, and evaluation quantifies impact.","Which of the three owns the final-answer correctness signal?"]],
+      [/monitor for an enterprise chatbot/i,["Which metric would page an operator immediately versus create a quality-review ticket?","How do you prevent aggregate dashboards from hiding one failing tenant or language?"]],
+      [/hundreds of thousands of users/i,["How do nested retries turn a dependency slowdown into a platform-wide outage?","Which resource do you capacity-plan by tokens rather than request count?"]],
+      [/retries, timeouts, and network/i,["Which errors are retryable, and who owns the total retry budget?","How do you safely retry a side effect when the previous outcome is unknown?"]],
+      [/What SLOs/i,["Which AI-quality SLO can be measured continuously without immediate ground truth?","Why should cross-tenant leakage never consume an error budget?"]],
+      [/detect data, retrieval, model/i,["How do you distinguish harmless input drift from harmful performance drift?","What fixed canary can detect a silent model-provider behavior change?"]],
+      [/monitor tool selection/i,["What metric reveals a model or prompt regression before task-success labels arrive?","How do you distinguish intentional retries from non-progressing duplicate calls?"]],
+      [/monitor RAG quality/i,["Which combination of proxies would trigger expert review?","Why can citation click-through not serve as a correctness metric by itself?"]],
+      [/incident-response process/i,["Which kill switch contains harmful actions while preserving read-only assistance?","What evidence must be preserved before rolling back the affected version?"]],
+      [/LangChain-style chains/i,["Which workflow requirement specifically forces the move from LCEL composition to LangGraph?","What operational complexity does checkpointed cyclic execution introduce?"]],
+      [/typed LangGraph state/i,["Which state fields need custom reducers when branches execute concurrently?","How do you stop an LLM-produced route from jumping to an unregistered node?"]],
+      [/production tool-calling loop/i,["Where do you validate semantic success after schema validation passes?","How does the available tool list change with user identity and workflow state?"]],
+      [/tools run concurrently/i,["How do you propagate cancellation and an overall deadline into parallel tool calls?","What merge rule applies when one branch succeeds and the other times out?"]],
+      [/supervisor and specialized/i,["What typed contract prevents a specialist from returning an unusable narrative?","When should routing be deterministic rather than model-selected?"]],
+      [/checkpointing and durable/i,["What consistency gap exists between an external side effect and the next checkpoint write?","How do you migrate persisted threads after changing the state schema?"]],
+      [/concurrent state updates/i,["Which reducers must be commutative to remain safe under nondeterministic completion order?","When should conflicting parallel updates fail instead of merge?"]],
+      [/short-term, long-term, semantic/i,["How does a memory item become superseded without losing audit history?","Why is storing every model-generated summary a compounding-error risk?"]],
+      [/Model Context Protocol/i,["Why does standardized tool discovery not make an MCP server trustworthy?","How would you detect and approve a server capability change?"]],
+      [/agent is finished/i,["What deterministic completion predicate complements the model’s finish decision?","How would you test liveness for all permitted graph paths?"]],
+      [/optimize LLM inference/i,["Which metric distinguishes high raw throughput from useful goodput under SLO?","When would prefix caching improve TTFT but not decode latency?"]],
+      [/KV cache/i,["How does P99 context length reduce maximum concurrency even when model weights fit?","What quality and hardware trade-offs accompany KV-cache quantization?"]],
+      [/continuous batching/i,["How do you prevent one long generation from starving short interactive requests?","Which scheduler signal should drive autoscaling besides request count?"]],
+      [/speculative decoding/i,["What determines draft-token acceptance rate?","When does the draft model’s extra compute cost more than the latency it saves?"]],
+      [/model gateway/i,["How do you prevent an availability fallback from violating residency or capability requirements?","Which routing change requires a full regression run even when APIs remain compatible?"]],
+      [/autoscale self-hosted/i,["Why are queued tokens better than CPU utilization for scaling GPU inference?","How do you drain a replica without interrupting active streaming generations?"]],
+      [/quantization and tensor/i,["How would you measure task-specific degradation after 4-bit quantization?","When does inter-GPU communication erase the benefit of additional tensor parallelism?"]],
+      [/streaming, cancellation/i,["How does a client disconnect propagate to inference and tool execution?","What changes when output policy requires whole-response inspection before release?"]],
+      [/managed model APIs/i,["Which hidden operational costs usually invalidate a simplistic self-hosted token-price comparison?","What exit strategy reduces provider dependency without sacrificing evaluated quality?"]],
+      [/asynchronous ingestion/i,["Why should queue messages contain object references instead of document bytes?","How do you activate a document only after every required index is verified?"]],
+      [/exactly-once processing/i,["How do idempotent upserts and an outbox create effectively-once outcomes over at-least-once delivery?","What reconciliation finds a vector written before the worker crashed?"]],
+      [/Python use async/i,["What happens when a blocking PDF parser runs inside the asyncio event loop?","How would you choose between a process pool and a distributed worker queue for OCR?"]],
+      [/bounded concurrency/i,["Where does a semaphore protect the downstream dependency rather than merely your process?","Why is queue age a better freshness signal than queue length alone?"]],
+      [/very large files/i,["How do page-level checkpoints allow one corrupt page to retry without reprocessing the document?","What limits protect against decompression bombs and pathological PDFs?"]],
+      [/consistency between object/i,["What remains active while the new vector index is complete but the lexical index is not?","How do tombstones and reconciliation guarantee eventual deletion from every store?"]],
+      [/visually complex PDFs/i,["How would you verify exact numbers extracted from a chart or merged table cell?","When should retrieval return the original image rather than only its generated description?"]],
+      [/GraphRAG alongside/i,["Which query class demonstrates measurable graph lift over decomposition plus vector search?","How do you correct a wrongly resolved entity without rebuilding unrelated graph communities?"]],
+      [/version parsers/i,["Which downstream artifacts are invalidated by changing only the chunker overlap?","How do you prevent reprocessing from overwhelming live indexing traffic?"]]
+    ];
+
+    function questionFollowups(item) {
+      const rule = FOLLOWUP_RULES.find(([pattern]) => pattern.test(item.q));
+      const selected = rule ? [...rule[1]] : [
+        `What concrete enterprise workload would demonstrate your approach to ${item.tags[0]}?`,
+        `Which competing design would you benchmark before adopting ${item.tags.slice(0,2).join(" and ")}?`
+      ];
+      selected.push(`What metric and failure-injection test would validate your answer to “${item.q.replace(/\?$/, "")}”?`);
+      return selected;
+    }
+
     const QUESTIONS = [];
     DATA.forEach(section => section.items.forEach(item => QUESTIONS.push({...item, category: section.category, challenges: section.challenges})));
     CROSS.forEach(item => QUESTIONS.push({...item, challenges:"Connect quality, security, reliability, economics, and operations in one architectural decision."}));
@@ -839,7 +962,7 @@ graph = StateGraph(AgentState)
             <div class="deep-block measure"><h4>Production decision</h4><p>Anchor the answer in a concrete workload and baseline, state the accepted trade-off, version every affected artifact, and add the relevant failure to automated regression. Release behind a feature flag through shadow or canary traffic, with an explicit rollback trigger, safe fallback behavior, and owning team before increasing exposure.</p></div>
           </div>
           <h4>Likely interviewer follow-ups</h4>
-          <ol class="followup-list">${playbook.follow.map(question => `<li>${question}</li>`).join("")}</ol>
+          <ol class="followup-list">${questionFollowups(item).map(question => `<li>${question}</li>`).join("")}</ol>
         </section>`;
     }
     function renderChips() {
